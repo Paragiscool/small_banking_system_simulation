@@ -1,0 +1,77 @@
+PART A: TRAINING MATERIAL & LEARNING RESOURCES 
+This section provides the foundational knowledge required to execute the project. The intern is 
+expected to study these materials thoroughly before commencing design work. Each sub-section maps 
+directly to one or more assessment competencies. 
+SECTION A1: OPEN BANKING FUNDAMENTALS 
+A1.1 What is Open Banking? 
+ 
+Open Banking is a regulatory and technological framework that mandates financial institutions to 
+share customer financial data with authorised third-party providers (TPPs) through secure Application 
+Programming Interfaces (APIs), subject to explicit customer consent. The movement represents a 
+fundamental shift from proprietary, closed banking systems to interoperable, API-driven ecosystems 
+that foster competition, innovation, and consumer choice. 
+The core principle is straightforward: a customer’s financial data belongs to the customer, not the 
+bank. If a customer consents to share their transaction history, account balances, or payment 
+capabilities with a fintech application, the bank must facilitate that sharing through standardised, 
+secure APIs. This principle is variously encoded in law across jurisdictions. 
+A1.2 PSD2 - European Union 
+ 
+The Revised Payment Services Directive (PSD2) is the European Union’s legislative framework for 
+open banking, effective since January 2018 with Strong Customer Authentication (SCA) enforcement 
+from September 2019. PSD2 mandates that banks (known as Account Servicing Payment Service 
+Providers, or ASPSPs) provide dedicated interfaces (APIs) for two categories of regulated third-party 
+providers: 
+●​ Account Information Service Providers (AISPs): Authorised to access customer account 
+information (balances, transaction history, standing orders) with customer consent. Use case: 
+personal finance management apps, creditworthiness assessment, accounting software 
+integration. 
+●​ Payment Initiation Service Providers (PISPs): Authorised to initiate payments directly from 
+a customer’s bank account. Use case: merchant checkout flows that bypass card networks, bill 
+payment services, peer-to-peer transfers. 
+PSD2 requires banks to implement a “dedicated interface” (i.e., a purpose-built API) or allow TPPs to 
+access through the customer-facing interface (screen scraping fallback) if the dedicated interface is 
+unavailable or underperforming. The Berlin Group, STET (France), and Open Banking UK have 
+published competing technical standards for PSD2 API implementation. 
+ 
+Regulatory Technical Standards (RTS) on SCA: The RTS specify that Strong Customer 
+Authentication must combine at least two of three factors: something the customer knows (PIN, 
+password), something the customer has (phone, hardware token), and something the customer is  
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 3
+
+(biometric). SCA is required for all electronic payments and account access, with defined exemptions 
+for low-value transactions, trusted beneficiaries, recurring payments, and merchant-initiated 
+transactions. 
+A1.3 UK Open Banking Standard 
+ 
+The UK’s Competition and Markets Authority (CMA) ordered the nine largest UK banks to adopt 
+open banking standards in 2017, predating PSD2 enforcement. The Open Banking Implementation 
+Entity (OBIE) developed detailed API specifications, a trust framework (the Open Banking 
+Directory), and conformance testing tools. Key characteristics that distinguish the UK model: 
+●​ Read/Write Data API specifications versioned at v3.1.x, providing granular endpoint 
+definitions for accounts, balances, transactions, beneficiaries, standing orders, direct debits, 
+products, offers, parties, and statements. 
+●​ Payment Initiation APIs supporting domestic payments, domestic scheduled payments, 
+domestic standing orders, international payments, and file payments (bulk). 
+●​ Event Notification APIs enabling real-time webhooks for consent revocation, account 
+changes, and payment status updates. 
+●​ A centralised Directory for TPP registration, certificate issuance (OBWAC/OBSEAL), and 
+software statement assertions. 
+●​ Mandatory Customer Experience Guidelines (CEG) ensuring banks provide consistent, 
+non-discriminatory consent journeys for TPP customers. 
+A1.4 India Account Aggregator (AA) Framework 
+ 
+India’s Account Aggregator framework, operationalised by the Reserve Bank of India (RBI) and the 
+Sahamati collective, takes a consent-mediated data-sharing approach distinct from both PSD2 and UK 
+Open Banking. The architecture defines four key participants: 
+●​ Financial Information User (FIU): The entity requesting data (e.g., a lending institution 
+requesting bank statements for credit assessment). 
+●​ Financial Information Provider (FIP): The entity holding the data (e.g., the customer’s 
+bank). 
+●​ Account Aggregator (AA): A licensed consent manager that facilitates data flow between 
+FIU and FIP. The AA never stores or processes the financial data itself - it is a blind pipe. 
+●​ Customer: The individual whose data is being shared, who must provide explicit, granular 
+consent. 
+The AA framework uses a consent artefact (a digitally signed JSON object) that specifies: purpose of 
+data access, data categories (deposit, investment, insurance, tax), date range of data requested, 
+frequency of access (one-time, periodic), and data life (how long the FIU may retain the data after  
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 4

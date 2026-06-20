@@ -1,0 +1,63 @@
+validation against the regulatory directory (instant approval for trusted certificates, manual review 
+only for edge cases). 
+Option C - Tiered approach: Basic security for sandbox (self-signed certs, simplified SCA), 
+enhanced security for production (full SCA, directory-validated certificates). Application-layer 
+encryption offered as an optional feature for TPPs that request it. 
+ 
+Decision Point 3: The Hostile TPP 
+Two months after launch, Meridian’s monitoring detects that a registered TPP (FinQuick Ltd) is 
+making 50,000 API calls per hour to the /accounts/{accountId}/transactions endpoint for a single 
+customer, well above normal usage patterns. The TPP appears to be scraping the customer’s entire 
+transaction history and caching it locally. This raises concerns: (1) the consent grants 
+‘ReadTransactionsDetail’ but does the TPP really need to re-fetch the same transactions every 2 
+minutes? (2) Is the TPP storing data beyond the consent’s data retention period? (3) The excessive 
+API calls are degrading backend performance for other TPPs. 
+The intern must design the response protocol: rate limiting escalation (warning → throttle → 
+block), communication with the TPP (formal notice citing the terms of service), evidence gathering 
+for potential regulatory escalation, and backend protection (dedicated rate limit bucket for the 
+offending TPP to prevent collateral damage). 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 33
+
+SECTION B6: SIMULATION DELIVERABLE MAPPING 
+ 
+Each simulation mode maps to specific project deliverables: 
+Game Mode 
+Mapped Deliverable 
+Assessment Dimension 
+Campaign M1: 
+Foundation 
+Gateway architecture doc, 
+technology rationale 
+API Platform Engineering (200 pts) 
+Campaign M2: 
+Specification 
+OpenAPI specs (20 endpoints), 
+consent data model 
+Open Banking Standards (150 pts) 
+Campaign M2: 
+Specification 
+OAuth/FAPI flow diagrams, 
+threat model 
+OAuth/FAPI Security (200 pts) 
+Campaign M3: 
+Developer Portal 
+Wireframes, Getting Started, 
+sandbox spec 
+Developer Experience (150 pts) 
+Campaign M4: 
+Go-Live 
+Rate limiting, versioning, 
+deprecation, monitoring 
+API Governance (150 pts) 
+Arena: DX Audit 
+Documentation quality, code 
+samples, error taxonomy 
+Documentation Quality (150 pts) 
+Sandbox: Regulatory 
+Review 
+Cross-cutting compliance 
+verification 
+All dimensions (bonus multiplier) 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 34

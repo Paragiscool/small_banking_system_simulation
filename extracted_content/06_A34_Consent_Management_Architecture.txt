@@ -1,0 +1,68 @@
+A3.4 Consent Management Architecture 
+ 
+Consent is the cornerstone of open banking. The consent lifecycle must be precisely managed: 
+Consent Creation: The TPP creates a consent resource specifying requested permissions, validity 
+period, and data range. The consent is in ‘AwaitingAuthorisation’ status. 
+Consent Authorisation: The customer authenticates and approves the consent. Status moves to 
+‘Authorised’. An authorization code is issued. 
+Consent Active: Tokens are issued against the consent. The TPP can make API calls within the 
+consent boundaries. The bank must track which data has been accessed under which consent. 
+Consent Revocation: The customer can revoke consent at any time via the bank’s interface. The bank 
+must immediately invalidate all tokens issued under that consent and notify the TPP via the Event 
+Notification API (webhook or polling). 
+Consent Expiry: Consents have a defined expiration. Upon expiry, tokens are invalidated and the 
+TPP must request fresh consent. UK Open Banking limits long-lived consents to 90 days for AIS. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 11
+
+SECTION A4: OPENAPI 3.0 SPECIFICATION DESIGN 
+A4.1 OpenAPI 3.0 Structure 
+ 
+The OpenAPI Specification (OAS) 3.0 is the industry standard for describing RESTful APIs. For 
+open banking, the OAS definition serves as the single source of truth for API behaviour. It defines 
+endpoints, request/response schemas, authentication methods, error formats, and documentation 
+metadata. A well-crafted OAS definition enables automated code generation (server stubs, client 
+SDKs), contract testing, documentation generation, and mock server creation. 
+The key sections of an OpenAPI 3.0 document for open banking: 
+●​ info: API title, version, description, contact, license, and terms of service URL. 
+●​ servers: Base URLs for production, sandbox, and staging environments. 
+●​ paths: Endpoint definitions with HTTP methods, parameters, request bodies, responses, 
+security requirements, and operation IDs. 
+●​ components/schemas: Reusable data models (Account, Balance, Transaction, Consent, 
+Payment, etc.) with JSON Schema validation rules. 
+●​ components/securitySchemes: OAuth 2.0 configuration (authorization URL, token URL, 
+scopes), mTLS specification, and API key definitions. 
+●​ components/parameters: Reusable path and query parameters (x-fapi-interaction-id, 
+x-fapi-financial-id, pagination parameters). 
+●​ components/responses: Reusable error response definitions (400 Bad Request, 401 
+Unauthorized, 403 Forbidden, 404 Not Found, 429 Too Many Requests, 500 Internal Server 
+Error). 
+ 
+A4.2 Mandatory Endpoints (20 Specifications) 
+The intern must design OpenAPI 3.0 specifications for a minimum of 20 endpoints across four API 
+domains: 
+ 
+# 
+Endpoint 
+Method 
+Domain 
+Description 
+1 
+/consents 
+POST 
+Consent 
+Create a new consent resource with 
+requested permissions and validity period 
+2 
+/consents/{consentId} 
+GET 
+Consent 
+Retrieve consent status and details 
+3 
+/consents/{consentId} 
+DELET
+E 
+Consent 
+Revoke an existing consent and 
+invalidate all associated tokens 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 12

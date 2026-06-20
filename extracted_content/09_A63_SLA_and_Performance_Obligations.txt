@@ -1,0 +1,57 @@
+A6.3 SLA and Performance Obligations 
+ 
+UK Open Banking mandates the following performance thresholds: 
+Metric 
+Threshold 
+Measurement 
+Availability 
+>= 99.5% 
+Per calendar quarter, excluding planned downtime 
+Response Time 
+(P95) 
+<= 1.5 seconds 
+95th percentile, measured at gateway egress 
+Error Rate 
+<= 0.5% 
+5xx responses as percentage of total requests 
+Planned 
+Downtime 
+<= 4 
+hours/quarter 
+Must be communicated 48 hours in advance 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 17
+
+SECTION A7: API VERSIONING & DEPRECATION STRATEGIES 
+A7.1 Versioning Approaches 
+ 
+URI Versioning (/v1/, /v2/): The API version is embedded in the URL path. Pros: explicit, easy to 
+route at the gateway level, clear in logs. Cons: breaks URI stability, cache invalidation across 
+versions. 
+Header Versioning (Accept: application/vnd.bank.v2+json): The version is specified in the Accept 
+header using a custom media type. Pros: URI stability, content negotiation support. Cons: harder to 
+test in a browser, less visible in logs. 
+Query Parameter Versioning (?version=2): The version is a query parameter. Pros: easy to add. 
+Cons: breaks caching (different URL = different cache entry), feels ad hoc. 
+Recommendation for Open Banking: URI versioning (/v3.1/) is the de facto standard in open 
+banking (used by UK OBIE, Berlin Group NextGenPSD2, and CDS Australia). It provides maximum 
+clarity and is aligned with regulatory expectations for version-specific conformance testing. 
+A7.2 Deprecation Policy 
+ 
+A well-defined deprecation policy is essential for the open banking ecosystem because TPPs build 
+integrations against specific API versions. Abrupt changes break production systems. The 
+recommended deprecation lifecycle: 
+●​ Sunset Header: When a version is marked for deprecation, include a Sunset HTTP header in 
+all responses: Sunset: Sat, 31 Dec 2025 23:59:59 GMT. This is machine-readable and allows 
+TPPs to build automated alerts. 
+●​ Deprecation Notice: Minimum 6-month notice before removal. Published on the developer 
+portal changelog, emailed to all registered developers, and announced via the status page. 
+●​ Migration Guide: A detailed document showing field-by-field mapping between the old and 
+new version, code examples for migration, and a summary of breaking vs. non-breaking 
+changes. 
+●​ Dual Running: Both old and new versions run simultaneously during the migration window. 
+Traffic to the deprecated version is monitored - TPPs still using it are contacted directly. 
+●​ Sunset Enforcement: After the deprecation window, the old version returns 410 Gone with a 
+body pointing to the migration guide and new version URL. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 18

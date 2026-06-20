@@ -1,0 +1,91 @@
+●​ Authentication & Authorisation Engine: Validates OAuth 2.0 access tokens (introspection 
+or local JWT validation), checks scopes against the requested endpoint, enforces consent 
+boundaries (e.g., the token grants access to account 12345 but the request is for account 67890 
+- reject). 
+●​ Request Validation: Validates incoming requests against the published OpenAPI 3.0 schema. 
+Rejects 
+malformed 
+payloads, 
+missing 
+required 
+headers 
+(x-fapi-interaction-id, 
+x-fapi-financial-id), and unsupported content types before the request reaches backend 
+services. 
+●​ Rate Limiter: Enforces per-TPP, per-endpoint, and global rate limits. Open banking 
+regulations typically mandate minimum performance thresholds (e.g., UK OBIE mandates 
+99.5% availability and response times under 1.5 seconds for 95th percentile). 
+●​ Response Transformer: Transforms internal service responses into the standardised open 
+banking response format. Strips internal fields, adds mandatory response headers 
+(x-fapi-interaction-id echo, content-type), and handles pagination metadata. 
+●​ Audit Logger: Logs every request and response with sufficient detail for regulatory audit 
+(timestamp, TPP identifier, endpoint, consent ID, response code, latency) without logging 
+sensitive customer data (account numbers, balances). 
+●​ Circuit Breaker: Protects backend core banking systems from cascading failures. If the 
+accounts service is degraded, the circuit breaker returns a standardised error response rather 
+than allowing requests to queue and timeout. 
+A2.4 Technology Landscape 
+ 
+Gateway 
+Type 
+Strengths for Open Banking 
+Considerations 
+Kong 
+Gateway 
+Open 
+Source / 
+Enterprise 
+Plugin ecosystem, declarative 
+config, Kubernetes-native, 
+DB-less mode 
+Plugin development in Lua/Go, 
+enterprise features paywalled 
+Apigee 
+(Google) 
+Managed 
+API analytics, developer 
+portal built-in, monetisation, 
+traffic management 
+Cost at scale, vendor lock-in, 
+learning curve 
+AWS API 
+Gateway 
+Managed 
+Lambda integration, AWS 
+ecosystem, WebSocket 
+support, regional deployment 
+Cold start latency, limited 
+customisation, AWS-only 
+Tyk Gateway 
+Open 
+Source / 
+Enterprise 
+Go-based (performant), 
+GraphQL support, UDG 
+(Universal Data Graph) 
+Smaller community, fewer 
+pre-built plugins 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 7
+
+Gateway 
+Type 
+Strengths for Open Banking 
+Considerations 
+WSO2 API 
+Manager 
+Open 
+Source 
+Full lifecycle management, 
+identity server integration, 
+analytics 
+Heavy Java stack, complex 
+deployment 
+Gravitee.io 
+Open 
+Source 
+Event-native, policy studio, 
+API designer, developer portal 
+Younger ecosystem, enterprise 
+support tiers 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 8

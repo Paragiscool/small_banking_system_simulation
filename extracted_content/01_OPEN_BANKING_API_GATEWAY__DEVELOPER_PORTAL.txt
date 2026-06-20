@@ -1,0 +1,61 @@
+OPEN BANKING API GATEWAY & DEVELOPER PORTAL 
+DESIGN 
+Category: Open Banking | API Economy 
+Timeline: 7 Days | AI-Accelerated Architecture & Product Design Sprint  
+Target: Undergraduate / MBA / Engineering (CS/IT) / FinTech / Product & API Enthusiasts 
+ 
+TASK: 
+Design an Open Banking API Gateway and Developer Portal using industry standards such as OpenAPI 
+3.0, OAuth 2.0, and FAPI security protocols. Work with a simulated banking environment covering 
+account information, payments, consent management, and event notifications across global frameworks 
+like PSD2, UK Open Banking, India’s Account Aggregator, and Australia’s CDR. Develop API 
+specifications, gateway architecture, consent lifecycle management, rate limiting strategies, and 
+developer onboarding systems. Create sandbox environments, monitoring frameworks, and API 
+governance policies including versioning and deprecation. Design a gamified “Open Gateway” 
+simulation platform to analyse real-world API platform challenges through regulatory, technical, and 
+developer experience lenses. 
+ 
+PART A: TRAINING MATERIAL & LEARNING RESOURCES 
+PART B: GAMIFIED SIMULATION BUSINESS CONCEPT 
+PART C: CASE STUDIES & REAL-WORLD APPLICATIONS 
+PART D: 15-DAY PROJECT METHODOLOGY & DELIVERABLES 
+PART E: NO-CODE TOOLS & PLATFORMS GUIDE 
+PART F: SUBMISSION PROTOCOL 
+ 
+Important Note: 
+This Project is designed, developed, and administered solely by Zetheta Algorithms Private Limited ("Zetheta") 
+for the purpose of assessing candidates, students, or event participants on behalf of engaging employers, 
+institutes, or event organisers. Completion of this Project does not guarantee employment, academic outcomes, 
+awards, or any other result - all such decisions remain at the sole discretion of the respective engaging party. 
+Zetheta may use AI-assisted tools to evaluate submissions; such outputs are indicative in nature and may be 
+inaccurate or incomplete. By participating, you consent to your performance data, scores, and submissions 
+being shared with relevant engaging parties for assessment and decision-making purposes. 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 1
+
+EXECUTIVE SUMMARY 
+ 
+This project document defines the comprehensive assessment framework for Project 1D under the 
+Software Engineer Role at Zetheta Algorithms Private Limited. The project tasks the intern with 
+architecting an Open Banking API Gateway and Developer Portal that is compliant with international 
+open banking mandates including the European Union’s Revised Payment Services Directive (PSD2), 
+India’s Account Aggregator framework, Australia’s Consumer Data Right (CDR), and the United 
+Kingdom’s Open Banking Standard. 
+The intern assumes the role of API Platform Lead at a mid-size bank that has received a regulatory 
+mandate to launch its Open Banking programme within a compressed timeline. The project is 
+deliberately designed to simulate the competing pressures that define real-world platform engineering: 
+the compliance team demands ironclad security, the business team demands speed-to-market, and 
+external third-party developers demand usability and frictionless onboarding. The intern must 
+navigate these tensions while producing production-grade technical artefacts. 
+Over seven days, the intern will design a complete API gateway architecture with security layer 
+specifications, author 20 endpoint specifications in OpenAPI 3.0 format, design OAuth 2.0 and FAPI 
+(Financial-grade API) security flows, create developer portal wireframes and documentation 
+structures, formulate rate limiting and throttling strategies, specify sandbox environment architecture, 
+and draft API versioning and deprecation policies. 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 2

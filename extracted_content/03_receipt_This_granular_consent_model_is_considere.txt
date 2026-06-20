@@ -1,0 +1,121 @@
+receipt). This granular consent model is considered more privacy-preserving than PSD2’s binary 
+consent approach. 
+A1.5 Australia Consumer Data Right (CDR) 
+ 
+Australia’s Consumer Data Right is a cross-sector data portability framework that began with banking 
+(Open Banking) and is extending to energy and telecommunications. Administered by the Australian 
+Competition and Consumer Commission (ACCC), the CDR mandates that accredited data recipients 
+can access consumer data through standardised APIs. The CDR uses a tiered accreditation model: 
+unrestricted accreditation (full API access, stringent security requirements), sponsored accreditation 
+(leveraging a sponsor’s accreditation), and CDR representative (operating under an accredited entity). 
+The technical standards are published by the Data Standards Body and mandate FAPI 1.0 Advanced 
+as the security profile. 
+A1.6 Comparative Analysis 
+ 
+Dimension 
+PSD2 (EU) 
+UK Open 
+Banking 
+India AA 
+Australia CDR 
+Regulator 
+European 
+Banking 
+Authority 
+CMA / FCA 
+RBI / Sahamati 
+ACCC / OAIC 
+Scope 
+Payment 
+accounts 
+CMA9 banks + 
+voluntary 
+All financial 
+data 
+Banking + energy + telco 
+Security 
+Profile 
+eIDAS 
+certificates 
+OBWAC/OBSE
+AL + FAPI 
+PKI + consent 
+artefact 
+FAPI 1.0 Advanced 
+Consent 
+Model 
+Binary (yes/no 
+per TPP) 
+Granular per data 
+cluster 
+Purpose-bound 
+artefact 
+Granular + tiered access 
+Data 
+Intermediar
+y 
+None (direct 
+API) 
+None (direct 
+API) 
+Account 
+Aggregator 
+(blind pipe) 
+None (direct API) 
+API 
+Standard 
+Berlin Group / 
+STET / OBIE 
+OBIE v3.1.x 
+ReBIT AA API 
+v2.0 
+CDS API v1.x 
+Payment 
+Initiation 
+Yes (PISP) 
+Yes (v3.1.x) 
+No (read-only) 
+No (read-only, planned) 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 5
+
+SECTION A2: API GATEWAY ARCHITECTURE 
+A2.1 What is an API Gateway? 
+ 
+An API gateway is a server that acts as the single entry point for all API requests from external 
+consumers. It sits between the client (TPP application, developer’s code) and the backend 
+microservices that implement business logic. The gateway is responsible for request routing, 
+composition, protocol translation, authentication, authorisation, rate limiting, request/response 
+transformation, caching, logging, monitoring, and circuit breaking. 
+In the context of open banking, the API gateway is the critical infrastructure component that stands 
+between the outside world (thousands of TPP applications) and the bank’s core systems (account 
+ledgers, payment engines, customer databases). Every request and response passes through the 
+gateway, making it the enforcement point for security policies, regulatory compliance, SLA 
+management, and data governance. 
+A2.2 Gateway Architecture Patterns 
+ 
+Pattern 1 - Centralised Gateway: A single gateway instance (or cluster) handles all API traffic. This 
+is the simplest pattern and suitable for smaller banks with limited API surface area. Pros: single point 
+of configuration, unified logging, simple certificate management. Cons: single point of failure, 
+monolithic configuration, blast radius of misconfiguration affects all APIs. 
+Pattern 2 - Federated Gateway (Gateway per Domain): Multiple gateway instances, each 
+dedicated to a specific API domain (accounts, payments, consent, onboarding). Each gateway is 
+independently configured, scaled, and deployed. Pros: blast radius containment, independent scaling 
+(payments may need 10x the capacity of accounts), domain-specific security policies. Cons: 
+operational complexity, cross-cutting concern duplication. 
+Pattern 3 - BFF (Backend-for-Frontend) + Gateway: A lightweight BFF layer sits behind the main 
+gateway and provides client-specific response shaping. The BFF aggregates calls to multiple backend 
+services and returns a tailored payload. Pros: optimised payloads per client type (mobile SDK vs. 
+server-to-server), reduced chattiness. Cons: additional latency hop, BFF proliferation. 
+Pattern 4 - Service Mesh + Thin Gateway: A service mesh (Istio, Linkerd) handles inter-service 
+communication, mTLS, observability, and traffic management internally, while a thin gateway 
+handles only external-facing concerns (public TLS termination, developer authentication, rate 
+limiting). Pros: separation of external vs. internal concerns, reduced gateway complexity. Cons: 
+requires Kubernetes maturity, operational learning curve. 
+ 
+A2.3 Key Gateway Components for Open Banking 
+●​ TLS Termination Layer: Terminates TLS 1.2/1.3 connections from TPPs. In PSD2 
+environments, this layer validates eIDAS QWAC certificates presented by TPPs. In UK Open 
+Banking, it validates OBWAC transport certificates issued by the Open Banking Directory. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 6

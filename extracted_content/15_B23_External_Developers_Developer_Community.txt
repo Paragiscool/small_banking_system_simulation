@@ -1,0 +1,93 @@
+B2.3 External Developers (Developer Community) 
+ 
+You have conducted pre-launch developer research with 35 fintech companies. Their feedback is 
+clear: (1) they will not integrate with banks that require paper-based onboarding, (2) they need a 
+sandbox with realistic synthetic data (not static mock responses), (3) they want SDKs in Python, 
+Node.js, and Java (not just API docs), (4) they expect sub-200ms API response times, and (5) they 
+will publicly criticise banks with poor DX on developer forums and social media. 
+ 
+SECTION B3: THREE GAME MODES 
+B3.1 Campaign Mode: The Regulatory Sprint 
+ 
+In Campaign Mode, the intern progresses through a structured 9-month timeline (compressed into 7 
+project days) with milestone gates. Each milestone requires specific deliverables and unlocks the next 
+phase: 
+Milestone 
+Timeline 
+Deliverable Required 
+Stakeholder Gate 
+M1: 
+Foundation 
+Month 
+1-2 
+Gateway architecture document, 
+technology selection rationale, 
+security threat model 
+Ananya (Compliance) sign-off 
+M2: 
+Specificatio
+n 
+Month 
+3-4 
+20 endpoint OpenAPI specs, 
+OAuth/FAPI flow diagrams, 
+consent data model 
+Technical Architecture Review 
+Board 
+M3: 
+Developer 
+Portal 
+Month 
+5-6 
+Portal wireframes, 
+documentation structure, 
+sandbox specification, 
+onboarding journey 
+Vikram (Business) + Developer 
+Advisory Panel 
+M4: 
+Go-Live 
+Month 
+7-9 
+Rate limiting policy, versioning 
+strategy, monitoring dashboard, 
+incident response playbook 
+Regulatory Conformance Test + Pen 
+Test 
+ 
+B3.2 Arena Mode: The Developer Experience Audit 
+ 
+In Arena Mode, the intern’s developer portal and API documentation are evaluated against a DX 
+benchmark scorecard. The audit simulates a real TPP developer attempting to integrate with 
+Meridian’s APIs for the first time. Scoring criteria: 
+●​ Time to First API Call (TTFAC): Can a developer go from zero (no account) to a successful 
+GET /accounts call in under 30 minutes using only the portal documentation? Score: 0-50 
+points. 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 29
+
+●​ Error Recovery: When the developer encounters a 401 or 403 error, does the error response 
+body provide enough information to self-diagnose and fix? Score: 0-30 points. 
+●​ Sandbox Completeness: Does the sandbox support the full consent journey, or does it return 
+static mocks? Can the developer trigger error scenarios? Score: 0-40 points. 
+●​ Documentation Accuracy: Do the code examples actually work when copied and run? Are 
+the request/response examples valid JSON matching the OpenAPI schemas? Score: 0-30 
+points. 
+B3.3 Sandbox Mode: The Regulatory Sandbox Review 
+ 
+In Sandbox Mode, the intern’s technical artefacts are evaluated against regulatory conformance 
+criteria. This simulates the regulator’s technical review before granting production certification. The 
+review checks: 
+ 
+●​ OpenAPI specifications conform to the published standard (correct endpoint paths, HTTP 
+methods, response codes, and header requirements). 
+●​ OAuth/FAPI flows implement all mandatory security controls (PKCE, mTLS, signed request 
+objects, certificate-bound tokens). 
+●​ Consent lifecycle is fully specified (creation, authorisation, usage, revocation, expiry) with no 
+gaps. 
+●​ Rate limiting policy does not constitute an ‘obstacle’ to TPP access under PSD2 Article 32(3). 
+●​ Sandbox environment meets minimum functional requirements (synthetic data, simulated 
+consent, error injection). 
+●​ API versioning and deprecation policy provides adequate migration timelines (minimum 6 
+months). 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 30

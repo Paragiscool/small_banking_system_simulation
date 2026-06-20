@@ -1,0 +1,68 @@
+PART C: CASE STUDIES & REAL-WORLD APPLICATIONS 
+CASE STUDY 1: UK OPEN BANKING - MONZO & STARLING’S API-FIRST STRATEGY 
+ 
+Background 
+Monzo and Starling Bank, UK-based digital challenger banks, adopted an API-first architecture from 
+inception, treating their public APIs not as a regulatory obligation but as a core product. Unlike 
+incumbent banks that bolted API layers onto legacy systems, Monzo built its entire banking platform 
+as a collection of microservices communicating via gRPC internally and exposing RESTful APIs 
+externally. This architectural decision gave them a natural advantage when CMA’s Open Banking 
+mandate arrived. 
+Technical Implementation 
+Monzo’s Open Banking implementation leveraged its existing API gateway (built on a custom 
+Go-based platform) with a dedicated Open Banking adapter layer. Key design decisions: (1) the 
+consent service was implemented as an independent microservice with its own datastore, decoupled 
+from the core authentication system; (2) the sandbox environment was generated from production API 
+schemas with automated synthetic data seeding; (3) the developer portal was built using Stoplight 
+with auto-generated documentation from OpenAPI specs; (4) mTLS was enforced at the gateway 
+level using Open Banking Directory certificates. 
+Lessons for Interns 
+●​ An API-first bank does not simply mean ‘we have APIs’ - it means the API is the product, not 
+a wrapper around a product. 
+●​ Consent must be a first-class microservice, not a flag on a user record. Consent has its own 
+lifecycle, audit requirements, and scaling characteristics. 
+●​ Sandbox quality directly correlates with TPP integration speed. Monzo reported that TPPs 
+who used their sandbox integrated 3x faster than those who relied on documentation alone. 
+●​ Developer portal is a marketing channel. Monzo’s developer documentation became a talent 
+acquisition tool - engineers applied to work at Monzo after reading their API docs. 
+ 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 35
+
+CASE STUDY 2: INDIA ACCOUNT AGGREGATOR - SETU & SAHAMATI ECOSYSTEM 
+ 
+Background 
+India’s Account Aggregator (AA) framework, operationalised in September 2021, represents a 
+fundamentally different approach to open banking. Rather than mandating banks to expose APIs 
+directly to TPPs, the AA framework introduces a consent-mediated intermediary (the Account 
+Aggregator) that facilitates data flow between Financial Information Providers (banks, insurers, 
+mutual funds, tax authorities) and Financial Information Users (lenders, wealth managers, insurance 
+underwriters). 
+Technical Implementation 
+Setu, one of the first technology providers in the AA ecosystem, built its infrastructure on three 
+pillars: (1) a consent management system implementing the Sahamati consent artefact specification 
+(digitally signed JSON with granular purpose, data categories, frequency, and data life parameters); 
+(2) an encrypted data transfer pipeline where financial data is encrypted end-to-end between FIP and 
+FIU - the AA itself never decrypts the data (the ‘blind pipe’ model); (3) a developer-friendly SDK that 
+abstracted the complex consent flow into a simple widget embeddable in any fintech application. 
+Lessons for Interns 
+●​ The consent artefact model (purpose-bound, time-limited, category-specific) is more 
+privacy-preserving than PSD2’s binary consent. Interns should consider how to implement 
+granular consent in their API design. 
+●​ The ‘blind pipe’ architecture ensures that no single entity (including the infrastructure 
+provider) has access to the full data. This has profound implications for data governance and 
+breach containment. 
+●​ India’s AA framework covers all financial data (bank accounts, mutual funds, insurance, 
+pensions, tax) - far broader than PSD2’s payment account scope. Cross-sector data portability 
+is the future direction globally. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 36

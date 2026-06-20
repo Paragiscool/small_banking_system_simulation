@@ -1,0 +1,98 @@
+SECTION A10: DATA MODELS & SCHEMA DESIGN PATTERNS 
+A10.1 Account Resource Model 
+ 
+The Account resource is the foundational data model in any open banking API. A well-designed 
+Account schema must support multiple account types (current/checking, savings, credit card, 
+mortgage, loan), multiple currencies, multiple identifiers (sort code + account number, IBAN, BBAN, 
+PAN for cards), and multiple status states (enabled, disabled, pending, deleted). 
+Key design decisions the intern must make: 
+●​ Identification Strategy: Should account IDs be exposed as the bank’s internal identifiers or 
+as opaque, externally-generated UUIDs? Best practice: always use opaque UUIDs in the API 
+layer. Internal account numbers should never be exposed to TPPs as they enable social 
+engineering and account enumeration attacks. 
+●​ Nested vs. Flat: Should the Account response embed balances and transactions (nested) or 
+require separate API calls (flat)? Best practice: flat with links. Nested responses create 
+over-fetching, complicate caching, and break consent granularity (a TPP might have consent 
+for account details but not balances). 
+●​ Envelope Pattern: All responses should use a consistent envelope: { Data: { ... }, Links: { 
+Self, 
+First, 
+Prev, 
+Next, 
+Last 
+}, 
+Meta: 
+{ 
+TotalPages, 
+FirstAvailableDateTime, 
+LastAvailableDateTime } }. The envelope separates business data from pagination metadata 
+and HATEOAS links. 
+A10.2 Transaction Resource Model 
+ 
+Transactions are the most frequently accessed and most voluminous data type in open banking. 
+Design considerations: 
+●​ Pagination: Cursor-based pagination (using a transaction ID or timestamp as the cursor) is 
+strongly preferred over offset-based pagination for transactions. Offset pagination becomes 
+increasingly slow as the offset grows (the database must scan and skip rows). Cursor 
+pagination is O(1) regardless of position in the dataset. 
+●​ Date 
+Filtering: 
+Mandatory 
+query 
+parameters: 
+fromBookingDateTime 
+and 
+toBookingDateTime (ISO 8601). The maximum date range should be configurable (90 days is 
+typical). Requests without date parameters should default to the last 90 days, not all history. 
+●​ Status: Transactions have two key statuses: Booked (settled, final) and Pending (authorised 
+but not settled). Some jurisdictions require separate endpoints or query parameters for pending 
+vs. booked transactions. 
+●​ Merchant Information: Transaction records should include: merchant name, merchant 
+category code (MCC), and optionally structured merchant address. This data is critical for TPP 
+use cases like personal finance management and expense categorisation. 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 23
+
+A10.3 Payment Resource Model 
+Payment initiation resources require careful schema design because they involve real money 
+movement. Key patterns: 
+●​ Idempotency: Every POST /domestic-payments request must include an x-idempotency-key 
+header. The bank must store this key and, for duplicate requests within a defined window 
+(24-48 hours), return the original response without re-executing the payment. This prevents 
+double payments caused by network retries, client bugs, or gateway timeouts. 
+●​ Risk 
+Assessment: 
+Payment 
+requests 
+must 
+include 
+a 
+Risk 
+object 
+containing: 
+PaymentContextCode 
+(BillPayment, 
+EcommerceGoods, 
+EcommerceServices, 
+PersonToPerson, Other), MerchantCategoryCode, MerchantCustomerIdentification, and 
+DeliveryAddress. This data feeds into the bank’s fraud detection engine. 
+●​ Payment Status Lifecycle: AcceptedSettlementInProcess → AcceptedSettlementCompleted 
+(success path). AcceptedSettlementInProcess → Rejected (failure path). Each status transition 
+should generate an event for the Event Notification API. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 24

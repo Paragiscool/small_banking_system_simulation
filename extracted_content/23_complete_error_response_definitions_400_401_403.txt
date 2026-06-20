@@ -1,0 +1,114 @@
+complete error response definitions (400, 401, 403, 404, 429, 500), example values for all 
+fields, and security scheme references. 
+●​ Write the accounts API specification (docs/api-specs/openapi-accounts.yaml) with endpoints: 
+GET /accounts, GET /accounts/{accountId}, GET /accounts/{accountId}/balances, GET 
+/accounts/{accountId}/transactions, 
+GET 
+/accounts/{accountId}/beneficiaries, 
+GET 
+/accounts/{accountId}/standing-orders, GET /accounts/{accountId}/direct-debits. Include 
+pagination parameters (page, per_page or cursor-based), date range filtering for transactions, 
+and response envelope structure. 
+●​ Define all reusable schema components: Account, Balance, Transaction, Consent, Beneficiary, 
+StandingOrder, DirectDebit, ErrorResponse, Links (pagination), Meta (total count, 
+timestamps). 
+●​ Validate both specifications using Spectral (OpenAPI linter) with zero errors and zero 
+warnings. Set up a GitHub Actions workflow (.github/workflows/lint-openapi.yml) that runs 
+Spectral on every push. 
+●​ Create a Postman collection (src/postman-collections/) with pre-configured requests for all 
+consent and account endpoints, including environment variables for sandbox/production 
+URLs. 
+Deliverable: Two complete OpenAPI 3.0 YAML files, passing linting, Postman collection, and 
+GitHub Actions workflow. 
+ 
+Day 4 - OpenAPI 3.0 Specifications (Payments & Events): 
+ 
+Learning Goals: Author OpenAPI specifications for payment initiation and event notification APIs. 
+Design the mock server. 
+ 
+●​ Write the payments API specification (docs/api-specs/openapi-payments.yaml) with 
+endpoints: 
+POST 
+/domestic-payment-consents, 
+GET 
+/domestic-payment-consents/{consentId}, 
+POST 
+/domestic-payments, 
+GET 
+/domestic-payments/{paymentId}, 
+POST 
+/international-payment-consents, 
+GET 
+/international-payment-consents/{consentId}, 
+POST 
+/international-payments, 
+GET 
+/international-payments/{paymentId}. Payment schemas must include: DebtorAccount, 
+CreditorAccount, InstructedAmount (with currency), RemittanceInformation, and Risk 
+assessment fields. 
+●​ Write the events API specification (docs/api-specs/openapi-events.yaml) with endpoints: 
+POST 
+/event-subscriptions, 
+GET 
+/event-subscriptions/{subId}, 
+DELETE 
+/event-subscriptions/{subId}, 
+POST 
+/events 
+(polling). 
+Define 
+event 
+types: 
+urn:bank:events:consent-revoked, 
+urn:bank:events:payment-status-changed, 
+urn:bank:events:account-access-consent-linked. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 45
+
+●​ Build a basic mock server (src/mock-server/) using Prism (Stoplight’s mock server) or 
+json-server that serves synthetic responses matching the OpenAPI specifications. The mock 
+server should return different responses based on test account IDs (e.g., account ID starting 
+with ‘ERR’ returns a 500 error). 
+●​ Extend the Postman collection with payment and event endpoints. Create a Postman test suite 
+that validates response schemas against the OpenAPI definitions. 
+Deliverable: Two additional OpenAPI YAML files (payments and events), mock server configuration, 
+extended Postman collection with test suite. 
+ 
+Day 5: Developer Portal Design & Sandbox Specification: 
+ 
+Learning Goals: Design the developer portal information architecture, create wireframes, and specify 
+the sandbox environment. 
+ 
+●​ Design 
+the 
+developer 
+portal 
+information 
+architecture 
+(docs/developer-portal/portal-sitemap.md) specifying: navigation structure, page hierarchy, 
+content relationships, and user journey flows for three personas (solo developer, enterprise 
+integration team, compliance officer reviewing TPP documentation). 
+●​ Create wireframes for 6+ portal pages using Figma, Miro, or Draw.io: (a) Landing page / 
+homepage, (b) Registration & onboarding flow, (c) Dashboard (after login - showing API 
+keys, usage metrics, sandbox access), (d) API reference page (interactive documentation with 
+‘Try It’), (e) Getting Started guide page, (f) API status page. Export wireframes as PNG and 
+commit to docs/developer-portal/wireframes/. 
+●​ Write the Getting Started guide (docs/developer-portal/getting-started.md) that takes a 
+developer from zero to first API call in under 30 minutes. Include code samples in Python, 
+Node.js, and Java for: registering an application, creating a consent, performing the OAuth 
+flow, and making a GET /accounts call. 
+●​ Write 
+the 
+authentication 
+guide 
+(docs/developer-portal/authentication-guide.md) 
+with 
+step-by-step OAuth 2.0 / FAPI flow instructions, certificate generation commands, token 
+management best practices, and a troubleshooting FAQ. 
+●​ Write the sandbox specification (docs/sandbox/sandbox-specification.md) covering: synthetic 
+data model (how many test accounts, what transaction patterns, what edge cases), simulated 
+consent journey, payment simulation lifecycle, error injection mechanism, rate limit 
+simulation, and data reset capability. 
+Deliverable: Portal sitemap, 6+ wireframes, Getting Started guide, authentication guide, and sandbox 
+specification. 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 46

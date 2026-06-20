@@ -1,0 +1,70 @@
+Day 6 - API Governance, Rate Limiting & Monitoring: 
+ 
+Learning Goals: Design the API governance framework including rate limiting, versioning, 
+deprecation, monitoring, and incident response. 
+ 
+●​ Write the rate limiting policy (docs/governance/rate-limiting-policy.md) specifying: algorithm 
+selection (token bucket vs. sliding window) with rationale, per-TPP limits by endpoint 
+category (accounts: 300/min, payments: 60/min, bulk: 10/min), global rate limits, burst 
+allowance, rate limit response headers (X-RateLimit-Limit, X-RateLimit-Remaining, 
+X-RateLimit-Reset, Retry-After), and escalation procedure for TPPs requesting limit 
+increases. 
+●​ Write the versioning policy (docs/governance/versioning-policy.md) specifying: versioning 
+scheme (URI-based /v3.1/), semantic versioning for minor releases, breaking vs. non-breaking 
+change taxonomy, and version lifecycle diagram. 
+●​ Write the deprecation policy (docs/governance/deprecation-policy.md) specifying: minimum 
+6-month deprecation window, Sunset header implementation, migration guide template, 
+dual-running period, sunset enforcement (410 Gone), and communication plan (email, portal 
+changelog, status page). 
+●​ Design the monitoring and alerting dashboard (docs/governance/monitoring-design.md) 
+specifying: key metrics (request count, latency P50/P95/P99, error rate by endpoint, consent 
+conversion rate, TPP distribution), alerting thresholds (latency > 1.5s, error rate > 0.5%, 
+availability < 99.5%), and dashboarding tool selection (Grafana, Datadog, or CloudWatch). 
+●​ Write the error reference document (docs/developer-portal/error-reference.md) with a 
+complete taxonomy of error codes, each linked to: cause, fix, and example corrected request. 
+Deliverable: Rate limiting policy, versioning policy, deprecation policy, monitoring design, and error 
+reference document. 
+ 
+Day 7 - Documentation, Testing & GITHUB Transfer: 
+ 
+Learning Goals: Finalise all documentation, run quality checks, and execute the GitHub repository 
+ownership transfer. 
+ 
+●​ Write the comprehensive README.md with: project overview, architecture diagram 
+(embedded), quick start guide, repository structure, technology stack, standards compliance 
+matrix, API endpoint summary table, and Zetheta attribution. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 47
+
+●​ Write SUBMISSION.md with: project approach narrative, design decision log (each major 
+decision with rationale and alternatives considered), challenges encountered, AI tools usage 
+disclosure, and self-assessment against the 1000-point rubric. 
+●​ Run final quality checks: Spectral OpenAPI linting (zero errors, zero warnings), Markdown 
+lint (markdownlint), link checker (all internal links resolve), image verification (all referenced 
+diagrams exist), and Postman collection validation. 
+●​ Write a 10-15 page technical report (docs/technical-report.md) covering: executive summary, 
+regulatory landscape analysis, architecture design rationale, security model analysis, developer 
+experience strategy, governance framework, limitations and future work, and references (20+ 
+citations). 
+●​ Execute pre-transfer checklist: all code committed and pushed to main branch, all tests 
+passing, no personal API keys or credentials in the repository, LICENSE file present, 
+.gitignore configured. 
+ 
+GITHUB REPOSITORY OWNERSHIP TRANSFER PROTOCOL 
+ 
+MANDATORY: The completed GitHub repository must be transferred to the ZethetaIntern 
+organisation account. Failure to complete the transfer results in project non-acceptance. No 
+personal forks or copies shall be retained after transfer. 
+ 
+Pre-Transfer Checklist 
+●​ All code committed and pushed to main branch (no dangling branches with unmerged work). 
+●​ All OpenAPI specs pass Spectral linting in CI/CD pipeline (green checkmark on latest 
+commit). 
+●​ Postman collection is exported and committed. 
+●​ All wireframes exported as PNG and committed. 
+●​ README.md is complete and accurate with Zetheta metadata header. 
+●​ No personal API keys, secrets, or credentials in the repository (check .env files, config files). 
+●​ LICENSE file present with Zetheta IP attribution. 
+●​ .gitignore properly configured (no .DS_Store, no node_modules, no .env). 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 48

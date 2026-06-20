@@ -1,0 +1,98 @@
+│   └── sandbox/ 
+│       ├── sandbox-specification.md 
+│       └── synthetic-data-model.md 
+├── src/ 
+│   ├── gateway-config/ 
+│   ├── mock-server/ 
+│   └── postman-collections/ 
+├── tests/ 
+│   ├── api-contract-tests/ 
+│   └── openapi-lint/ 
+└── .github/ 
+    └── workflows/ 
+        └── lint-openapi.yml 
+ 
+Day 1 - Regulatory Landscape & Gateway Architecture: 
+ 
+Learning Goals: Understand the regulatory requirements across PSD2, AA, CDR, and UK Open 
+Banking. Design the high-level gateway architecture. Set up the project repository. 
+ 
+●​ Set up the GitHub repository with the complete folder structure shown above. Initialise with 
+README.md 
+containing 
+the 
+Zetheta 
+metadata 
+header 
+(ZETHETA_INTERN_ID, 
+ZETHETA_PROJECT_CODE: P01D, ZETHETA_PROJECT_TITLE: Open Banking API 
+Gateway & Developer Portal Design). 
+●​ Write a regulatory comparison document (docs/architecture/regulatory-comparison.md) 
+comparing PSD2, UK Open Banking, India AA, and Australia CDR across: scope, consent 
+model, security profile, API standard, governance body, and timeline. 
+●​ Design the gateway architecture (docs/architecture/gateway-architecture.md) specifying: 
+gateway pattern selection (centralised vs. federated vs. BFF) with rationale, component 
+diagram (TLS termination, authentication engine, request validator, rate limiter, response 
+transformer, audit logger, circuit breaker), technology selection rationale (Kong vs. Apigee vs. 
+AWS API Gateway vs. Tyk vs. custom), deployment topology (cloud region, availability 
+zones, load balancer configuration). 
+●​ Create 
+the 
+architecture 
+diagram 
+using 
+Draw.io 
+or 
+Mermaid 
+and 
+commit 
+to 
+docs/architecture/diagrams/. 
+●​ Write the .zetheta-project.json metadata file with complete project information. 
+Deliverable: Committed repository with regulatory comparison, gateway architecture document, 
+component diagram, and project metadata. 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 43
+
+Day 2 - OAuth 2.0/FAPI Security Architecture:  
+ 
+Learning Goals: Design the complete OAuth 2.0 and FAPI security architecture including consent 
+management, token lifecycle, and certificate management. 
+ 
+●​ Write 
+the 
+security 
+architecture document (docs/architecture/security-architecture.md) 
+covering: OAuth 2.0 Authorization Code Flow with PKCE (step-by-step with sequence 
+diagram), FAPI 1.0 Advanced profile implementation (mTLS, signed request objects, PAR, 
+JARM), token lifecycle management (access token, refresh token, ID token - issuance, 
+validation, rotation, revocation), certificate management (eIDAS QWAC/QSEAL for PSD2, 
+OBWAC/OBSEAL for UK, CDR Register certificates for Australia). 
+●​ Create detailed sequence diagrams (using Mermaid or Draw.io) for: (a) AIS consent flow 
+(consent creation → authorisation → token exchange → API call), (b) PIS payment initiation 
+flow (payment consent → authorisation → payment submission → status polling), (c) consent 
+revocation flow (customer-initiated → token invalidation → TPP notification). 
+●​ Design the consent data model specifying: consent resource schema (JSON), consent states 
+(AwaitingAuthorisation, Authorised, Rejected, Revoked, Expired), consent permissions 
+taxonomy (ReadAccountsBasic, ReadAccountsDetail, ReadBalances, ReadTransactionsBasic, 
+ReadTransactionsDetail, 
+ReadBeneficiaries, 
+ReadStandingOrders, 
+ReadDirectDebits, 
+ReadProducts), and consent-to-token binding. 
+●​ Write a threat model document identifying the top 10 security threats to the API gateway 
+(injection, broken authentication, excessive data exposure, rate limiting bypass, consent scope 
+escalation, token theft, certificate spoofing, replay attacks, CSRF in consent flow, insider 
+threat) with mitigation strategies for each. 
+Deliverable: Security architecture document, three sequence diagrams, consent data model, and threat 
+model. All committed with meaningful commit messages. 
+ 
+Day 3 - OpenAPI 3.0 Specifications (Accounts & Consent): 
+ 
+Learning Goals: Author production-grade OpenAPI 3.0 specifications for the account information and 
+consent management APIs. 
+ 
+●​ Write the consent API specification (docs/api-specs/openapi-consents.yaml) with endpoints: 
+POST /consents, GET /consents/{consentId}, DELETE /consents/{consentId}. Each endpoint 
+must include: full request/response schemas with $ref components, all mandatory headers 
+(x-fapi-interaction-id, x-fapi-financial-id, Authorization, x-idempotency-key for POST), 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 44

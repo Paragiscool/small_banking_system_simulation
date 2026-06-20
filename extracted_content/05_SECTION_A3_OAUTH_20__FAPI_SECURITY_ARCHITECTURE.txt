@@ -1,0 +1,90 @@
+SECTION A3: OAUTH 2.0 & FAPI SECURITY ARCHITECTURE 
+A3.1 OAuth 2.0 Fundamentals for Open Banking 
+ 
+OAuth 2.0 is the authorisation framework that underpins all open banking API access. In the open 
+banking context, OAuth 2.0 enables a customer to grant a third-party provider (TPP) limited, 
+revocable access to their financial data without sharing their banking credentials. The four primary 
+roles in the OAuth 2.0 open banking flow are: 
+●​ Resource Owner: The bank customer who owns the financial data. 
+●​ Client: The TPP application requesting access to the customer’s data. 
+●​ Authorisation Server: The bank’s OAuth server that authenticates the customer, collects 
+consent, and issues access/refresh tokens. 
+●​ Resource Server: The bank’s API gateway/backend that serves the protected resources 
+(account data, payment endpoints). 
+A3.2 Authorization Code Flow with PKCE 
+ 
+The Authorization Code Flow is the only grant type permitted for open banking user-delegated access. 
+The Proof Key for Code Exchange (PKCE) extension is mandatory to prevent authorization code 
+interception attacks. The flow proceeds as follows: 
+●​ TPP Registration: The TPP registers with the bank’s developer portal, obtains a client_id, 
+and registers redirect_uris. For FAPI compliance, the TPP also provides its transport certificate 
+(mTLS) and signing certificate. 
+●​ Consent Creation: The TPP calls the bank’s Consent API to create a consent resource 
+specifying 
+the 
+permissions 
+requested 
+(ReadAccountsDetail, 
+ReadBalances, 
+ReadTransactionsDetail, etc.), the expiration date, and the transaction date range. 
+●​ PKCE Challenge Generation: The TPP generates a high-entropy code_verifier (43–128 
+characters, 
+URL-safe), 
+computes 
+the 
+code_challenge 
+as 
+BASE64URL(SHA256(code_verifier)), 
+and 
+includes 
+both 
+code_challenge 
+and 
+code_challenge_method=S256 in the authorization request. 
+●​ Authorization Request: The TPP redirects the customer’s browser to the bank’s authorization 
+endpoint with parameters: response_type=code, client_id, redirect_uri, scope, state (CSRF 
+protection), nonce (replay protection), code_challenge, code_challenge_method, and a request 
+object (signed JWT containing all parameters for FAPI compliance). 
+●​ Customer Authentication & Consent: The bank authenticates the customer (SCA: password 
++ OTP/biometric), displays the consent screen showing which data the TPP is requesting, and 
+collects explicit consent. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 9
+
+●​ Authorization Code Issuance: Upon consent, the bank redirects back to the TPP’s 
+redirect_uri with an authorization code and the original state parameter. The code is 
+short-lived (60–90 seconds) and single-use. 
+●​ Token Exchange: The TPP exchanges the authorization code for an access token and refresh 
+token by calling the token endpoint. The TPP includes the code_verifier - the bank verifies 
+that SHA256(code_verifier) matches the original code_challenge. For FAPI, this call is 
+authenticated via mTLS client certificate. 
+●​ API Access: The TPP calls the resource server (API gateway) with the access token in the 
+Authorization: Bearer header. The gateway validates the token, checks scopes and consent 
+boundaries, and proxies the request to the backend. 
+A3.3 FAPI 1.0 Advanced Profile 
+ 
+The Financial-grade API (FAPI) security profile, developed by the OpenID Foundation, hardens 
+OAuth 2.0 for high-security financial APIs. FAPI 1.0 Advanced is mandated by Australia CDR, 
+recommended by UK Open Banking v3.1.x, and increasingly adopted in other jurisdictions. Key 
+requirements beyond baseline OAuth 2.0: 
+ 
+●​ Mutual TLS (mTLS): TPPs must present an X.509 client certificate during TLS handshake. 
+The certificate is bound to the TPP’s client_id at registration. Access tokens are 
+certificate-bound (sender-constrained) - a stolen token cannot be used without the 
+corresponding private key. 
+●​ Signed Request Objects (JAR): Authorization requests must be passed as signed JWTs 
+(request parameter or request_uri), preventing parameter tampering in the browser redirect. 
+●​ Signed & Encrypted ID Tokens: ID tokens returned by the authorization server must be 
+signed (RS256/PS256/ES256) and optionally encrypted (A256GCM). The ID token must 
+contain the s_hash (state hash), c_hash (code hash), and at_hash (access token hash) claims. 
+●​ PAR (Pushed Authorization Requests): The authorization request is first pushed to a 
+dedicated PAR endpoint (backchannel, not browser), which returns a request_uri. The browser 
+redirect then references this request_uri instead of carrying parameters in the URL. This 
+prevents request leakage via browser history, referrer headers, and proxy logs. 
+●​ JARM (JWT Secured Authorization Response Mode): The authorization response (code + 
+state) is returned as a signed JWT rather than plain query parameters, preventing response 
+tampering. 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 10

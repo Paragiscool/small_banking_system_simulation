@@ -1,0 +1,60 @@
+CASE STUDY 3: EU PSD2 - TINK’S AGGREGATION PLATFORM 
+ 
+Background 
+Tink (acquired by Visa in 2022 for EUR 1.8 billion) built a platform that aggregated Open Banking 
+APIs from over 3,400 banks across Europe, providing a unified API abstraction layer for fintech 
+developers. Instead of integrating individually with hundreds of banks (each with slightly different 
+API implementations despite the PSD2 standard), developers integrated once with Tink and accessed 
+all banks through a normalised API. 
+Technical Challenges 
+Despite PSD2’s standardisation intent, Tink encountered massive implementation inconsistencies 
+across European banks: (1) different API standards (Berlin Group NextGenPSD2 vs. STET vs. UK 
+OBIE vs. Polish API) required separate connector implementations; (2) banks interpreted consent 
+scope differently - some returned 90 days of transactions, others returned only 30; (3) SCA 
+implementation varied wildly (some banks used redirect, others used decoupled OTP, others used 
+embedded SCA); (4) sandbox quality ranged from excellent (UK CMA9 banks) to non-functional 
+(many smaller EU banks). 
+Lessons for Interns 
+●​ Standards are necessary but not sufficient. Even with PSD2, implementation variance across 
+banks created a fragmented ecosystem. The quality of your OpenAPI specification and 
+sandbox determines whether aggregators can integrate efficiently. 
+●​ The aggregator business model (Tink, Plaid, Yodlee, TrueLayer) exists precisely because 
+bank-level API integration is too costly for individual fintechs. Your developer portal’s quality 
+determines whether TPPs integrate directly or go through an aggregator (reducing your data 
+on TPP behaviour). 
+●​ Tink’s EUR 1.8 billion acquisition validates that API infrastructure for finance is a 
+multi-billion dollar market. The intern’s work on this project represents skills that are 
+commercially valuable at the highest tier. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 37
+
+CASE STUDY 4: AUSTRALIA CDR - FAPI 1.0 ADVANCED IN PRODUCTION 
+ 
+Background 
+Australia’s Consumer Data Right (CDR) is the first open banking regime to mandate FAPI 1.0 
+Advanced as the security profile for all data sharing. This makes CDR the most technically 
+demanding open banking implementation globally. The CDR also extends beyond banking into 
+energy (electricity, gas) and telecommunications, making it a cross-sector data portability framework. 
+Technical Implementation 
+CDR’s technical standards (published by the Data Standards Body) mandate: (1) FAPI 1.0 Advanced 
+with PAR (Pushed Authorization Requests) and JARM (JWT Authorization Response Mode); (2) 
+client authentication via private_key_jwt or mTLS; (3) holder-of-key bound access tokens 
+(certificate-bound or DPoP); (4) encrypted ID tokens; (5) a centralised Register with real-time TPP 
+status checking; (6) tiered accreditation with different security requirements per tier. 
+Lessons for Interns 
+●​ FAPI 1.0 Advanced is the direction of travel for all open banking markets. The UK is 
+migrating from its current FAPI-like profile to full FAPI 1.0 Advanced. India’s AA v2.0 is 
+aligning with FAPI principles. Building FAPI into your architecture now future-proofs the 
+design. 
+●​ CDR’s tiered accreditation model (unrestricted, sponsored, representative) provides a useful 
+framework for thinking about developer onboarding tiers in the portal design. 
+●​ Cross-sector data portability (banking + energy + telco) means the API gateway architecture 
+must be extensible beyond banking data. The component design should be data-agnostic. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 38

@@ -1,0 +1,73 @@
+handling, or pagination logic against static mocks. The sandbox must be dynamic: it must enforce 
+authentication, validate consent, return different data for different test accounts, and simulate the 
+payment status lifecycle. 
+ 
+Anti-Pattern 6: Ignoring the Sunset Header 
+Banks that deprecate API versions without the Sunset HTTP header force TPPs to rely on email 
+notifications and changelog monitoring. The Sunset header (RFC 8594) is machine-readable and 
+allows automated deprecation alerting. Every response from a deprecated version must include: 
+Sunset: [date], Deprecation: [date], and Link: <new-version-url>; rel="successor-version". 
+ 
+Anti-Pattern 7: Leaking Internal Identifiers 
+Exposing internal database IDs, core banking system account numbers, or internal service names in 
+API responses creates security risks (enumeration attacks, internal topology disclosure) and tight 
+coupling (changing the internal system breaks the external API). All external identifiers should be 
+opaque UUIDs generated at the API layer. 
+ 
+Anti-Pattern 8: Missing Idempotency on Payment Endpoints 
+Payment initiation endpoints without idempotency keys are a critical defect. Network timeouts, client 
+retries, and gateway failures can cause duplicate payment submissions. The x-idempotency-key 
+header and server-side deduplication logic are non-negotiable for any endpoint that modifies state. 
+ 
+Anti-Pattern 9: Inconsistent Error Responses 
+Banks that return different error response structures for different endpoints (JSON for accounts, XML 
+for payments, plain text for authentication errors) make it impossible for TPPs to build consistent 
+error handling. The error response schema must be uniform across all endpoints: { Code, Id, Message, 
+Path, Url } with every error code deep-linked to a documentation page. 
+ 
+Anti-Pattern 10: No API Changelog 
+Banks that make changes to their APIs without a public, versioned changelog force TPPs to discover 
+breaking changes in production. Every API change - including non-breaking additions - must be 
+documented in the changelog with: version number, date, type (breaking/non-breaking), affected 
+endpoints, migration guide (if breaking), and deprecation timeline (if applicable). 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 27
+
+PART B: GAMIFIED SIMULATION - “OPEN GATEWAY: THE API PLATFORM 
+CHALLENGE” 
+Note on the Simulation Concept: The gamified simulation concept presented in this section is 
+provided as a reference framework. Students may choose to follow this concept or design their own 
+original gamified simulation - with a different name, structure, narrative, or game mechanics - as long 
+as it meets the assessment criteria outlined in Part F. 
+SECTION B1: SIMULATION NARRATIVE 
+You are Priya Mehta, the newly appointed API Platform Lead at Meridian Commercial Bank, a 
+mid-size bank with 4 million retail customers, 120,000 SME clients, and USD 28 billion in assets 
+under management. Meridian has received regulatory notification that it must comply with the 
+national Open Banking mandate within 9 months. The bank’s existing technology stack consists of a 
+monolithic core banking system (Temenos T24), a basic mobile banking app, and no external API 
+infrastructure. 
+The CEO has given you three mandates: (1) build a compliant Open Banking API gateway that passes 
+the regulator’s conformance tests, (2) create a developer portal that attracts at least 50 registered TPPs 
+within 6 months of launch, and (3) do it without disrupting existing digital banking services. Your 
+budget is USD 2.4 million and your team consists of 6 backend engineers, 2 security specialists, 1 
+DevOps engineer, and 1 technical writer. 
+ 
+SECTION B2: COMPETING STAKEHOLDER DEMANDS 
+B2.1 The Compliance Team (Ananya, Chief Compliance Officer) 
+ 
+Ananya’s non-negotiable requirements: every API call must be logged for 7 years with full audit trail; 
+no data can leave the bank’s sovereign cloud region; all TPP certificates must be validated against the 
+regulator’s directory in real-time; consent screens must include mandatory disclosures in the national 
+language; penetration testing must be completed by an independent CREST-certified firm before any 
+production API goes live. Ananya has veto power over launch timelines. 
+ 
+B2.2 The Business Team (Vikram, Head of Digital Banking) 
+ 
+Vikram’s priorities are diametrically opposed to Ananya’s conservative timeline. He wants Meridian 
+to be the first bank in the market with open APIs to capture early-mover advantage. He is demanding: 
+(1) premium API tiers with monetisation from day one, (2) a ‘Powered by Meridian’ co-branding 
+requirement for TPPs displaying account data, (3) a data analytics pipeline that gives Meridian insight 
+into which TPP features are most popular with its customers, and (4) an aggressive 4-month launch 
+timeline instead of the regulatory 9-month window. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 28

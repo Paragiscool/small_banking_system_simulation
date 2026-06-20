@@ -1,0 +1,725 @@
+Transfer Steps 
+●​ Final Commit: Make a final commit with the message: "Final submission - Open Banking 
+API Gateway v1.0 - [Your Full Name] - [YYYY-MM-DD]". 
+●​ Tag Release: Create a git tag: git tag -a v1.0 -m "Open Banking API Gateway v1.0 Final 
+Submission". 
+●​ Push Tag: Push the tag: git push origin v1.0. 
+●​ Transfer Ownership: Navigate to Settings → Danger Zone → Transfer Ownership. Enter the 
+organisation: ZethetaIntern. Confirm the transfer. 
+●​ Verify 
+Transfer: 
+Confirm 
+the 
+repository 
+now 
+appears 
+under 
+github.com/ZethetaIntern/openbanking-api-gateway with all commits, branches, and tags 
+intact. 
+●​ Delete Local Copies: Remove ALL local clones, forks, and copies of the repository from 
+personal devices. 
+●​ Confirmation Email: Send confirmation email to project supervisor with: (a) transfer 
+timestamp, (b) repository URL, (c) git tag v1.0 hash, (d) Spectral lint summary, (e) brief 
+self-assessment. 
+ 
+Post-Transfer: ZethetaIntern will review the repository within 48 hours. You will receive 
+feedback on architecture quality, specification accuracy, documentation completeness, and 
+governance framework rigour. Outstanding repositories may be selected for patent filing and 
+commercial development. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 49
+
+DAILY SUMMARY MATRIX 
+ 
+This matrix provides a consolidated view of what must be completed each day, the files that must be 
+committed, and the assessment dimensions each deliverable maps to. 
+ 
+Day 
+Theme 
+Files to Commit 
+Primary 
+Dimension 
+Secondary Dimension 
+1 
+Regulator
+y & 
+Architect
+ure 
+regulatory-comparison.md, 
+gateway-architecture.md, 
+diagrams/, 
+.zetheta-project.json 
+API Platform 
+Engineering 
+Open Banking Standards 
+2 
+Security 
+& 
+Consent 
+security-architecture.md, 3 
+sequence diagrams, 
+consent-data-model.md, 
+threat-model.md 
+OAuth/FAPI 
+Security 
+Open Banking Standards 
+3 
+OpenAPI: 
+Accounts 
+& 
+Consent 
+openapi-consents.yaml, 
+openapi-accounts.yaml, 
+lint-openapi.yml, postman/ 
+Open Banking 
+Standards 
+Documentation Quality 
+4 
+OpenAPI: 
+Payments 
+& Events 
+openapi-payments.yaml, 
+openapi-events.yaml, 
+mock-server/, postman/ 
+Open Banking 
+Standards 
+API Platform Engineering 
+5 
+Developer 
+Portal & 
+Sandbox 
+portal-sitemap.md, 
+wireframes/, 
+getting-started.md, 
+authentication-guide.md, 
+sandbox-specification.md 
+Developer 
+Experience 
+Documentation Quality 
+6 
+Governan
+ce & 
+Monitorin
+g 
+rate-limiting-policy.md, 
+versioning-policy.md, 
+deprecation-policy.md, 
+monitoring-design.md, 
+error-reference.md 
+API 
+Governance 
+Documentation Quality 
+7 
+Finalise 
+& 
+Transfer 
+README.md, 
+SUBMISSION.md, 
+technical-report.md, v1.0 tag, 
+repository transfer 
+Documentation 
+Quality 
+All dimensions 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 50
+
+COMMIT MESSAGE CONVENTIONS 
+ 
+The intern’s commit history is assessed as part of the Documentation & Code Quality dimension. 
+Commit messages must follow the Conventional Commits specification: 
+ 
+feat: add consent API OpenAPI specification 
+docs: add OAuth 2.0 sequence diagram for AIS flow 
+fix: correct international payment consent endpoint path 
+chore: configure Spectral linting GitHub Action 
+refactor: restructure payment schemas into reusable components 
+test: add Postman tests for consent endpoint validation 
+ 
+Commit Frequency: A minimum of 3 meaningful commits per day is expected. Single-commit days 
+(entire day’s work in one dump) will be penalised under Documentation Quality. The commit history 
+should tell the story of the project’s evolution. 
+Branch Strategy: The intern should work on the main branch for this project. Feature branches are 
+acceptable but must be merged into main before end of day. No orphaned branches should exist at 
+transfer time. 
+ 
+EXPECTED FILE SIZES & QUALITY BENCHMARKS 
+The following benchmarks indicate the expected depth and thoroughness of each deliverable. These 
+are guidelines, not hard limits - quality matters more than quantity. However, deliverables that fall 
+significantly below these benchmarks are likely to lack sufficient depth. 
+ 
+Deliverable 
+Expected 
+Length 
+Quality Indicator 
+Gateway Architecture 
+(gateway-architecture.md) 
+1,500-2,500 
+words 
+Component diagram with 7+ subsystems, technology 
+selection matrix, deployment topology with AZ/region 
+specification 
+Security Architecture 
+(security-architecture.md) 
+2,000-3,000 
+words 
+3 sequence diagrams, FAPI 1.0 Advanced controls 
+enumerated, certificate management across 3+ regimes 
+Threat Model 
+(threat-model.md) 
+1,500-2,000 
+words 
+10+ threats in STRIDE or similar framework, each with 
+likelihood, impact, and specific mitigation 
+Each OpenAPI YAML file 400-800 
+lines 
+All endpoints with full schemas, examples, headers, 
+error responses, security schemes 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 51
+
+Deliverable 
+Expected 
+Length 
+Quality Indicator 
+Getting Started Guide 
+1,000-1,500 
+words 
+Code samples in 3+ languages, step-by-step from 
+registration to first API call 
+Authentication Guide 
+1,000-2,000 
+words 
+OAuth/FAPI flow walkthrough, certificate generation 
+commands, troubleshooting FAQ 
+Sandbox Specification 
+1,000-1,500 
+words 
+Synthetic data model, simulated consent, error injection, 
+rate limit simulation, data reset 
+Rate Limiting Policy 
+800-1,200 
+words 
+Algorithm selection, per-endpoint tiers, response 
+headers, regulatory compliance analysis 
+Versioning Policy 
+600-800 
+words 
+Scheme selection rationale, breaking vs non-breaking 
+taxonomy, version lifecycle 
+Deprecation Policy 
+600-800 
+words 
+Sunset header, notice period, migration guide template, 
+410 enforcement 
+Monitoring Design 
+800-1,200 
+words 
+Metrics catalogue, alerting thresholds, dashboard 
+wireframe or specification 
+Error Reference 
+1,000-1,500 
+words 
+Complete error code taxonomy with cause, fix, and 
+example corrected request for each 
+Technical Report 
+3,000-4,000 
+words 
+Executive summary, regulatory analysis, architecture 
+rationale, security analysis, DX strategy, governance 
+framework, limitations, 20+ references 
+README.md 
+500-1,000 
+words 
+Project overview, embedded architecture diagram, 
+quickstart, repo structure, standards matrix 
+SUBMISSION.md 
+800-1,200 
+words 
+Approach narrative, decision log, challenges, AI usage 
+disclosure, self-assessment 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 52
+
+SAMPLE .zetheta-project.json 
+ 
+The following is the exact structure expected for the project metadata file: 
+ 
+{ 
+  "intern_id": "[YOUR_INTERN_ID]", 
+  "intern_name": "[YOUR_FULL_NAME]", 
+  "intern_email": "[YOUR_EMAIL]", 
+  "project_code": "P01D", 
+  "project_title": "Open Banking API Gateway & Developer Portal 
+Design", 
+  "submission_type": "github", 
+  "submission_date": "[YYYY-MM-DDTHH:MM:SSZ]", 
+  "tech_stack": [ 
+    "OpenAPI 3.0", "Swagger Editor", "Postman", 
+    "Spectral", "Draw.io", "Figma", "GitHub Actions" 
+  ], 
+  "duration_weeks": 1, 
+  
+"github_repo_url": 
+"https://github.com/ZethetaIntern/openbanking-api-gateway", 
+  "assessment_criteria": { 
+    "api_platform_engineering": true, 
+    "open_banking_standards": true, 
+    "oauth_fapi_security": true, 
+    "developer_experience": true, 
+    "api_governance": true, 
+    "documentation_quality": true 
+  } 
+} 
+ 
+SAMPLE OPENAPI 3.0 STRUCTURE (REFERENCE) 
+ 
+The following shows the expected top-level structure of an OpenAPI specification file for this project. 
+This is a structural reference - the intern must write the complete specification with all schemas, 
+examples, and error responses. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 53
+
+openapi: 3.0.3 
+info: 
+  title: Meridian Bank Open Banking - Accounts API 
+  version: 3.1.0 
+  description: > 
+    Account Information API for Open Banking compliant 
+    with PSD2/UK OBIE/India AA standards. 
+  contact: 
+    name: Meridian API Platform Team 
+    email: api-support@meridianbank.example 
+  license: 
+    name: Proprietary 
+servers: 
+  - url: https://sandbox.api.meridianbank.example/v3.1 
+    description: Sandbox environment 
+  - url: https://api.meridianbank.example/v3.1 
+    description: Production environment 
+security: 
+  - OAuth2: 
+      - accounts 
+paths: 
+  /accounts: 
+    get: 
+      operationId: getAccounts 
+      summary: List consented accounts 
+      tags: [Accounts] 
+      parameters: 
+        - $ref: '#/components/parameters/x-fapi-interaction-id' 
+        - $ref: '#/components/parameters/x-fapi-financial-id' 
+        - $ref: '#/components/parameters/Authorization' 
+      responses: 
+        '200': 
+          description: Successful response 
+          content: 
+            application/json: 
+              schema: 
+                $ref: '#/components/schemas/AccountsResponse' 
+        '401': 
+          $ref: '#/components/responses/Unauthorized' 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 54
+
+'403': 
+          $ref: '#/components/responses/Forbidden' 
+        '429': 
+          $ref: '#/components/responses/TooManyRequests' 
+components: 
+  schemas: 
+    Account: 
+      type: object 
+      required: [AccountId, Currency, AccountType] 
+      properties: 
+        AccountId: 
+          type: string 
+          format: uuid 
+          example: 22289-01 
+        Currency: 
+          type: string 
+          pattern: '^[A-Z]{3}$' 
+          example: GBP 
+        AccountType: 
+          type: string 
+          enum: [Business, Personal] 
+        AccountSubType: 
+          type: string 
+          enum: [CurrentAccount, Savings, CreditCard, Loan] 
+  securitySchemes: 
+    OAuth2: 
+      type: oauth2 
+      flows: 
+        authorizationCode: 
+          authorizationUrl: /authorize 
+          tokenUrl: /token 
+          scopes: 
+            accounts: Access account information 
+            payments: Initiate payments 
+ 
+Note: This reference shows approximately 20% of the expected specification depth. The intern’s 
+actual specification must include: all 20 endpoints, complete request/response schemas with nested 
+objects, all mandatory FAPI headers, example values for every field, pagination parameters, date 
+range filters, and comprehensive error response definitions.
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 55
+
+SAMPLE SEQUENCE DIAGRAM (MERMAID SYNTAX) 
+ 
+The following shows the expected format for OAuth/FAPI sequence diagrams using Mermaid syntax. 
+The intern must produce at least three diagrams: AIS consent flow, PIS payment flow, and consent 
+revocation flow. 
+ 
+sequenceDiagram 
+    participant Customer 
+    participant TPP as TPP Application 
+    participant AuthServer as Bank Auth Server 
+    participant Gateway as API Gateway 
+    participant ConsentSvc as Consent Service 
+    participant AccountSvc as Account Service 
+ 
+    Note over TPP,ConsentSvc: Phase 1 - Consent Creation 
+    TPP->>Gateway: POST /consents (permissions, expiry) 
+    Gateway->>ConsentSvc: Create consent resource 
+    ConsentSvc-->>Gateway: ConsentId, Status=AwaitingAuth 
+    Gateway-->>TPP: 201 Created (ConsentId) 
+ 
+    Note over Customer,AuthServer: Phase 2 - Authorization 
+    TPP->>AuthServer: GET /authorize (client_id, consent_id, 
+                      code_challenge, request_object) 
+    AuthServer->>Customer: Display login + consent screen 
+    Customer->>AuthServer: Authenticate (SCA) + Approve 
+    AuthServer->>ConsentSvc: Update status=Authorised 
+    AuthServer-->>TPP: 302 Redirect (code, state) 
+ 
+    Note over TPP,AuthServer: Phase 3 - Token Exchange 
+    TPP->>AuthServer: POST /token (code, code_verifier, 
+                      client_cert via mTLS) 
+    AuthServer-->>TPP: access_token, refresh_token, id_token 
+ 
+    Note over TPP,AccountSvc: Phase 4 - API Access 
+    TPP->>Gateway: GET /accounts (Bearer token, FAPI headers) 
+    Gateway->>Gateway: Validate token, check consent scope 
+    Gateway->>AccountSvc: Fetch account data 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 56
+
+AccountSvc-->>Gateway: Account list 
+    Gateway-->>TPP: 200 OK (accounts, pagination links) 
+ 
+The sequence diagram must be committed as a .mmd (Mermaid) file and also rendered as a PNG 
+image in the diagrams/ directory. Both the source and rendered versions must be present in the 
+repository. 
+ 
+Submission Instructions: 
+●​ All files to be named using convention: ProjectCode_YourName_DeliverableName (e.g., 
+201169C_RahulShah_MainReport) 
+●​ All PDFs must be readable and not password-protected 
+●​ Supporting Excel files must be in .xlsx format 
+●​ All daily deliverables across Days 1–15 are to be submitted on Day 15 as a consolidated final 
+submission. Students should combine their work into one or two PDFs and/or one Excel file 
+wherever possible, rather than submitting separate files for each day. Clearly label each 
+section within the consolidated document by its respective day and topic for ease of 
+assessment. 
+●​ Late submissions attract the penalties specified in Part F Assessment Criteria 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 57
+
+PART E: TOOLS & PLATFORMS GUIDE 
+This section provides guidance on the recommended tools for executing the project. All tools listed 
+are either free, open-source, or have free tiers sufficient for this project. 
+ 
+SECTION E1: API DESIGN & SPECIFICATION 
+ 
+Tool 
+Purpose 
+Free Tier 
+Key Feature for This Project 
+Swagger 
+Editor 
+OpenAPI 3.0 
+authoring 
+Fully free (open 
+source) 
+Real-time YAML validation, preview, 
+and code generation 
+Stoplight 
+Studio 
+Visual API design Free for individuals 
+Visual schema builder, mock server, 
+linting rules 
+Spectral 
+OpenAPI linting 
+Fully free (open 
+source) 
+Custom rulesets, CI/CD integration, 
+severity levels 
+Postman 
+API testing & 
+collections 
+Free (up to 25 
+requests/run) 
+Collection runner, environment 
+variables, test scripts 
+Prism 
+Mock server from 
+OpenAPI 
+Fully free (open 
+source) 
+Dynamic mocking, validation proxy, 
+request logging 
+ 
+SECTION E2: DIAGRAMMING & WIREFRAMING 
+ 
+Tool 
+Purpose 
+Free Tier 
+Key Feature for This Project 
+Draw.io 
+(diagrams.net) 
+Architecture 
+diagrams 
+Fully free 
+AWS/Azure/GCP icons, sequence 
+diagrams, flowcharts 
+Miro 
+Collaborative 
+whiteboarding 
+Free (3 boards) 
+Wireframing, user journey 
+mapping, sticky notes 
+Figma 
+UI wireframing 
+Free (3 files) 
+Developer portal wireframes, 
+component libraries 
+Mermaid 
+Code-based 
+diagrams 
+Fully free (open 
+source) 
+Sequence diagrams, flowcharts, 
+embedded in Markdown 
+PlantUML 
+UML diagrams 
+Fully free (open 
+source) 
+Sequence diagrams, class 
+diagrams, state machines 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 58
+
+SECTION E3: DOCUMENTATION & COLLABORATION 
+ 
+Tool 
+Purpose 
+Free Tier 
+Key Feature for This Project 
+Notion 
+Documentation hub 
+Free for personal 
+use 
+Markdown, databases, 
+embedded diagrams, sharing 
+ReadMe 
+Developer portal 
+simulation 
+Free (1 project) 
+API reference from OpenAPI, 
+changelog, Getting Started 
+GitHub Pages 
+Static site hosting 
+Fully free 
+Host API docs, portal 
+prototype from the repository 
+MkDocs 
+Documentation site 
+generator 
+Fully free (open 
+source) 
+Markdown to HTML, search, 
+versioning 
+ 
+SECTION E4: AI-ASSISTED DEVELOPMENT 
+AI tools are permitted and encouraged for this project. Proper attribution and critical evaluation of AI 
+outputs is required. 
+ 
+Tool 
+Permitted Use 
+Attribution Required 
+Claude (Anthropic) 
+Research, drafting, code generation, 
+review 
+Yes - document which sections 
+were AI-assisted in 
+SUBMISSION.md 
+GitHub Copilot 
+Code completion, YAML generation 
+Yes - note in commit messages 
+if Copilot-assisted 
+ChatGPT (OpenAI) 
+Research, alternative perspectives 
+Yes - document in 
+SUBMISSION.md 
+Cursor / Windsurf 
+Code editing, refactoring 
+Yes - note in 
+SUBMISSION.md 
+ 
+AI INTEGRITY POLICY: While AI tools may generate initial drafts, the intern is responsible 
+for: (1) verifying all technical claims and regulatory references, (2) identifying and correcting AI 
+hallucinations, (3) adding original architectural reasoning that goes beyond AI-generated 
+boilerplate, (4) demonstrating critical thinking through design decision rationale. Submissions 
+that are unmodified AI outputs with no evidence of critical evaluation will receive significant 
+penalties under the Documentation Quality dimension. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 59
+
+SECTION E5: ESSENTIAL READING LIST 
+ 
+The following resources are essential pre-reading for this project. Interns are expected to reference 
+these materials in their technical report. 
+ 
+Regulatory & Standards Documents 
+●​ PSD2 Regulatory Technical Standards (RTS) on SCA & CSC: European Banking 
+Authority Delegated Regulation (EU) 2018/389. The foundational document defining Strong 
+Customer Authentication requirements and common and secure communication standards. 
+●​ UK Open Banking API Specifications v3.1: Published by the Open Banking Implementation 
+Entity (OBIE). Defines the Read/Write Data API, Payment Initiation API, Event Notification 
+API, and Dynamic Client Registration API with full OpenAPI 3.0 specifications. 
+●​ India Account Aggregator API Specification v2.0: Published by ReBIT (Reserve Bank 
+Information Technology). Defines the consent flow, data flow, and notification APIs for the 
+AA ecosystem. 
+●​ Australia 
+CDS 
+API 
+Standards: 
+Published 
+by 
+the 
+Data 
+Standards 
+Body 
+(consumerdatastandards.gov.au). The most technically demanding open banking standard, 
+mandating FAPI 1.0 Advanced. 
+●​ FAPI 1.0 Advanced Security Profile: OpenID Foundation specification. Defines the security 
+hardening of OAuth 2.0 for financial APIs including mTLS, PAR, JARM, and signed request 
+objects. 
+●​ Berlin Group NextGenPSD2 Framework v1.3: The most widely adopted PSD2 API 
+standard across continental Europe. Defines Account Information, Payment Initiation, and 
+Confirmation of Funds APIs. 
+ 
+Technical References 
+●​ RFC 6749 - The OAuth 2.0 Authorization Framework: The foundational OAuth 2.0 
+specification. Required reading for understanding authorization flows. 
+●​ RFC 7636 - PKCE (Proof Key for Code Exchange): Extension to OAuth 2.0 preventing 
+authorization code interception. Mandatory for all open banking implementations. 
+●​ RFC 8705 - OAuth 2.0 Mutual-TLS Client Authentication: Defines mTLS-based client 
+authentication and certificate-bound access tokens for FAPI compliance. 
+●​ RFC 9126 - Pushed Authorization Requests (PAR): Defines the PAR endpoint for pushing 
+authorization requests via backchannel. Required for FAPI 1.0 Advanced. 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 60
+
+●​ RFC 8594 - The Sunset HTTP Header Field: Defines the Sunset header for communicating 
+API deprecation dates in a machine-readable format. 
+●​ OpenAPI Specification 3.0.3: The technical standard for describing RESTful APIs. Required 
+for all API specification deliverables. 
+ 
+Industry Analysis & DX Best Practices 
+●​ Stripe API Documentation: stripe.com/docs - The benchmark for developer experience 
+design. Study the information architecture, code sample presentation, and error handling 
+documentation. 
+●​ Plaid Developer Documentation: plaid.com/docs - Example of aggregator API design with 
+embeddable consent UX (Plaid Link). 
+●​ TrueLayer Developer Portal: truelayer.com/docs - European open banking aggregator with 
+strong DX focus. Study the Getting Started guide and authentication walkthrough. 
+●​ Open Banking UK Directory & Trust Framework: directory.openbanking.org.uk - The 
+operational trust framework for UK open banking. Study the TPP registration and certificate 
+issuance process. 
+●​ Sahamati Account Aggregator Dashboard: sahamati.org.in - Live statistics and ecosystem 
+participants for India’s AA framework. 
+ 
+SECTION E6: GITHUB WORKFLOW TEMPLATES 
+ 
+The following CI/CD workflow templates should be adapted for the project repository: 
+ 
+OpenAPI Linting Workflow (GitHub Actions) 
+name: Lint OpenAPI Specifications 
+on: [push, pull_request] 
+jobs: 
+  lint: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+      - uses: actions/setup-node@v4 
+        with: { node-version: '20' } 
+      - run: npm install -g @stoplight/spectral-cli 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 61
+
+- run: spectral lint docs/api-specs/*.yaml --fail-severity 
+warn 
+ 
+Markdown Linting Workflow 
+name: Lint Markdown 
+on: [push, pull_request] 
+jobs: 
+  markdown-lint: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+      - uses: DavidAnson/markdownlint-cli2-action@v16 
+        with: { globs: '**/*.md' } 
+ 
+Link Checker Workflow 
+name: Check Links 
+on: [push] 
+jobs: 
+  links: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - uses: actions/checkout@v4 
+      - uses: lycheeverse/lychee-action@v1 
+        with: { args: '--verbose docs/' } 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 62
+
+PART F: SUBMISSION PROTOCOL 
+ 
+Projects are assessed using a comprehensive 1000-point rubric covering seven dimensions: Problem 
+Understanding, Solution Quality, Research & Analysis, Presentation & Clarity, Innovation & 
+Creativity, Feasibility & Practicality and CV alignment. Assessment is conducted through a 
+combination of manual review and AI-powered evaluation. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+END OF PROJECT DOCUMENT 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 63

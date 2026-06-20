@@ -1,0 +1,105 @@
+A10.4 Consent Resource Model - Detailed Schema 
+ 
+The consent resource is the most complex data model because it governs all subsequent API access. 
+Minimum required fields: 
+Field 
+Type 
+Required Description 
+ConsentId 
+string (UUID) 
+Generate
+d 
+Unique identifier assigned by the bank upon 
+creation 
+Status 
+enum 
+Generate
+d 
+AwaitingAuthorisation | Authorised | 
+Rejected | Revoked | Expired 
+StatusUpdateDateTim
+e 
+datetime (ISO 
+8601) 
+Generate
+d 
+Timestamp of last status change 
+CreationDateTime 
+datetime (ISO 
+8601) 
+Generate
+d 
+When the consent was created 
+Permissions 
+array of strings 
+Required 
+ReadAccountsBasic, ReadAccountsDetail, 
+ReadBalances, ReadTransactionsBasic, 
+ReadTransactionsDetail, ReadBeneficiaries, 
+ReadStandingOrders, ReadDirectDebits, 
+ReadProducts, ReadOffers 
+ExpirationDateTime 
+datetime (ISO 
+8601) 
+Optional 
+When the consent expires (max 90 days for 
+AIS in UK OBIE) 
+TransactionFromDate
+Time 
+datetime (ISO 
+8601) 
+Optional 
+Earliest transaction date the TPP can access 
+TransactionToDateTi
+me 
+datetime (ISO 
+8601) 
+Optional 
+Latest transaction date the TPP can access 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 25
+
+SECTION A11: COMMON ANTI-PATTERNS & PITFALLS IN OPEN BANKING API 
+DESIGN 
+This section catalogues the most common mistakes made by banks implementing open banking APIs. 
+The intern should use this as a checklist against their own design. 
+ 
+Anti-Pattern 1: Screen-Scraping-as-API 
+Some banks implement their open banking API by wrapping their internet banking HTML screens in 
+an API layer - essentially performing server-side screen scraping of their own systems. This approach 
+is fragile (breaks when the UI changes), slow (HTML parsing overhead), incomplete (UI often shows 
+a subset of available data), and fundamentally misaligned with the API-first principle. The correct 
+approach is to expose the same backend service layer that feeds the internet banking UI. 
+ 
+Anti-Pattern 2: Monolithic OpenAPI Specification 
+Some banks publish a single, massive OpenAPI specification file containing all endpoints (accounts, 
+payments, events, consent) in one document. This creates: unwieldy documentation (developers must 
+scroll through 5,000+ lines to find one endpoint), slow rendering in Swagger UI, and difficult 
+versioning (a change to one endpoint triggers a version bump for the entire specification). Best 
+practice: 
+split 
+specifications 
+by 
+domain 
+(openapi-accounts.yaml, 
+openapi-payments.yaml, 
+openapi-consents.yaml, openapi-events.yaml). 
+ 
+Anti-Pattern 3: Consent-as-Afterthought 
+Banks that treat consent as a simple boolean flag (‘user said yes’) rather than a first-class resource 
+with its own lifecycle will fail regulatory review. Consent must track: which permissions were 
+granted, when consent was given, when it expires, which accounts are linked, and provide an audit 
+trail of every data access made under the consent. The consent service must be independently scalable 
+and independently auditable. 
+ 
+Anti-Pattern 4: Rate Limiting as Obstacle 
+PSD2 Article 32(3) explicitly prohibits banks from creating ‘obstacles’ to TPP access. Overly 
+aggressive rate limiting (e.g., 10 requests per minute for accounts data) can be interpreted as an 
+obstacle. The rate limiting policy must be justified by genuine technical necessity (backend 
+protection), applied equally to the bank’s own channels and TPPs, and published transparently on the 
+developer portal. 
+ 
+Anti-Pattern 5: Static Mock Sandbox 
+A sandbox that returns hardcoded JSON responses for every request (regardless of query parameters, 
+consent state, or authentication) is worse than no sandbox. TPPs cannot test their consent flow, error  
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 26

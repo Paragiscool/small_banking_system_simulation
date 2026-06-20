@@ -1,0 +1,65 @@
+COMPARATIVE TAKEAWAYS FOR PROJECT DESIGN 
+ 
+Case Study 
+Key Takeaway for Intern’s Design 
+CS1: Monzo/Starling 
+(UK) 
+Build consent as an independent microservice with its own datastore. 
+Sandbox quality determines TPP adoption speed. 
+CS2: Setu/Sahamati 
+(India) 
+Granular, purpose-bound consent artefacts are more 
+privacy-preserving. The blind-pipe architecture prevents data 
+concentration risk. 
+CS3: Tink (EU) 
+Standards alone do not prevent fragmentation. OpenAPI spec quality 
+and sandbox fidelity determine aggregator integration cost. 
+CS4: CDR (Australia) 
+FAPI 1.0 Advanced is the global security direction. Design for 
+cross-sector extensibility beyond banking. 
+CS5: Stripe (DX 
+benchmark) 
+Time to First API Call < 30 minutes. Error messages are 
+documentation. Code samples must be tested in CI/CD. 
+CS6: Plaid (Consent UX) 
+Consent UX is the conversion bottleneck. Granular account selection 
+and real-time status reduce abandonment. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 41
+
+PART D: 7-DAY PROJECT METHODOLOGY & DELIVERABLES 
+ 
+CRITICAL: This is a 7-day AI-accelerated intensive sprint. The intern is expected to use 
+AI-assisted development tools (Claude, GitHub Copilot, ChatGPT) to compress what would 
+traditionally be a 3-6 month architecture engagement into a rigorous 7-day project. AI tools are 
+permitted and encouraged for research, drafting, code generation, and documentation. However, 
+the intern must demonstrate original architectural thinking, critical evaluation of AI outputs, and 
+the ability to identify and correct AI-generated errors. 
+ 
+REPOSITORY STRUCTURE 
+The intern must create a GitHub repository with the following structure from Day 1: 
+openbanking-api-gateway/ 
+├── README.md 
+├── SUBMISSION.md 
+├── .zetheta-project.json 
+├── docs/ 
+│   ├── architecture/ 
+│   │   ├── gateway-architecture.md 
+│   │   ├── security-architecture.md 
+│   │   ├── deployment-topology.md 
+│   │   └── diagrams/ 
+│   ├── api-specs/ 
+│   │   ├── openapi-accounts.yaml 
+│   │   ├── openapi-payments.yaml 
+│   │   ├── openapi-consents.yaml 
+│   │   └── openapi-events.yaml 
+│   ├── developer-portal/ 
+│   │   ├── wireframes/ 
+│   │   ├── getting-started.md 
+│   │   ├── authentication-guide.md 
+│   │   └── error-reference.md 
+│   ├── governance/ 
+│   │   ├── rate-limiting-policy.md 
+│   │   ├── versioning-policy.md 
+│   │   └── deprecation-policy.md 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 42

@@ -1,0 +1,56 @@
+A5.3 Error Taxonomy for Open Banking APIs 
+ 
+A consistent, informative error taxonomy is one of the most impactful DX investments. Open banking 
+APIs must return structured error responses that enable programmatic handling. The recommended 
+error response structure: 
+ 
+{ 
+  "Code": "OBEX.Field.Missing", 
+  "Id": "f47ac10b-58cc-4372-a567-0e02b2c3d479", 
+  "Message": "Required field [DebtorAccount.Identification] is 
+missing", 
+  "Path": "Data.Initiation.DebtorAccount.Identification", 
+  "Url": "https://docs.bank.com/errors/OBEX.Field.Missing" 
+} 
+ 
+Each error code should link to a documentation page with: what caused the error, how to fix it, and 
+example corrected requests. This reduces support ticket volume dramatically. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 15
+
+SECTION A6: RATE LIMITING, THROTTLING & API GOVERNANCE 
+A6.1 Rate Limiting Strategies 
+ 
+Rate limiting protects backend systems from abuse and ensures fair resource allocation across TPPs. 
+Open banking introduces regulatory constraints on rate limiting - banks cannot use rate limits to 
+deliberately degrade TPP access (which would constitute ‘obstacle creation’ under PSD2 Article 
+32(3)). The rate limiting strategy must balance three objectives: backend protection, fair access, and 
+regulatory compliance. 
+ 
+Token Bucket Algorithm: Each TPP is allocated a bucket of tokens that refills at a defined rate. Each 
+API call consumes one token. When the bucket is empty, requests are throttled (HTTP 429). Pros: 
+allows bursting (the bucket can accumulate tokens during quiet periods), simple to implement. Cons: 
+doesn’t differentiate between endpoint types. 
+Sliding Window Algorithm: Counts requests in a sliding time window (e.g., last 60 seconds). More 
+predictable than token bucket because it doesn’t allow arbitrary bursts. Cons: requires more state 
+storage. 
+Tiered Rate Limits: Different limits for different endpoints based on backend cost. 
+Accounts/balances endpoints (read-only, cacheable) get higher limits than payment initiation 
+endpoints (write, expensive). Example: 300 req/min for accounts, 60 req/min for payments, 10 
+req/min for bulk operations. 
+A6.2 Response Headers for Rate Limiting 
+ 
+Every response must include rate limit headers so TPPs can implement client-side throttling: 
+X-RateLimit-Limit: 300 
+X-RateLimit-Remaining: 247 
+X-RateLimit-Reset: 1679558400 
+Retry-After: 30 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 16

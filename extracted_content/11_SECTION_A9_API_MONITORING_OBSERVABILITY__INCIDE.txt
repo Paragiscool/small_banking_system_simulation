@@ -1,0 +1,107 @@
+SECTION A9: API MONITORING, OBSERVABILITY & INCIDENT RESPONSE 
+A9.1 The Three Pillars of Observability 
+ 
+Production API platforms require observability across three pillars: metrics (quantitative 
+measurements over time), logs (discrete event records), and traces (request journey across distributed 
+components). In open banking, each pillar has regulatory implications. 
+ 
+Metrics: Time-series numerical data aggregated at regular intervals. Key metrics for an open banking 
+gateway include: request rate (requests per second, broken down by TPP, endpoint, and HTTP 
+method), latency distribution (P50, P95, P99 measured at gateway egress), error rate (4xx and 5xx 
+responses as a percentage of total), token issuance rate (OAuth tokens issued per minute, indicating 
+consent activity), consent conversion rate (consents authorised divided by consents created, indicating 
+friction in the consent flow), and availability (uptime percentage per calendar quarter, measured 
+against the 99.5% regulatory threshold). 
+Logs: Structured event records capturing individual API interactions. For regulatory audit, every log 
+entry must include: timestamp (ISO 8601 with timezone), TPP identifier (client_id or software 
+statement assertion ID), endpoint path and HTTP method, consent ID (linking the request to the 
+governing consent), response status code, response latency (milliseconds), x-fapi-interaction-id 
+(correlation ID), and request/response size (bytes). Critical rule: logs must NEVER contain sensitive 
+customer data (account numbers, balances, transaction details) in plain text. Personally identifiable 
+information must be tokenised or masked. 
+Traces: Distributed traces track a single request’s journey through the gateway and backend services. 
+A typical open banking request might traverse: TLS termination → certificate validation → token 
+introspection → scope/consent check → rate limit check → request validation → backend service call 
+→ response transformation → audit logging. Each hop adds latency, and traces help identify 
+bottlenecks. Tools: Jaeger, Zipkin, AWS X-Ray, Datadog APM. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 21
+
+A9.2 Alerting Strategy 
+ 
+Alerts must be actionable, not noisy. The recommended alerting hierarchy for an open banking 
+gateway: 
+Severity 
+Condition 
+Response 
+Time 
+Notification 
+Channel 
+Example 
+P1 - 
+Critical 
+API availability 
+< 99% 
+< 15 
+minutes 
+PagerDuty + SMS + 
+phone call 
+Core banking backend 
+unreachable, all API calls failing 
+P2 - High 
+P95 latency > 3 
+seconds 
+< 30 
+minutes 
+PagerDuty + Slack 
+Database connection pool 
+exhausted, responses slow 
+P3 - 
+Medium 
+Error rate > 2% 
+for a single 
+endpoint 
+< 2 hours 
+Slack + email 
+Payment endpoint returning 500 
+for a specific currency 
+P4 - Low 
+Single TPP 
+exceeding rate 
+limits 
+< 24 
+hours 
+Email + Jira ticket 
+Fintech startup hammering 
+sandbox without backoff 
+ 
+A9.3 Incident Response for Open Banking 
+ 
+Open banking regulations (particularly PSD2 Article 33 and UK OBIE Operational Guidelines) 
+impose specific incident response obligations: 
+ 
+●​ Major Incident Notification: If API availability falls below the mandated threshold, the bank 
+must notify the regulator within a defined period (typically 4 hours for major incidents). The 
+notification must include: incident timeline, root cause (preliminary), customer impact 
+assessment, and remediation plan. 
+●​ TPP Communication: All registered TPPs must be notified of planned downtime (minimum 
+48 hours advance notice) and unplanned outages (as soon as practically possible) via the status 
+page and direct email. 
+●​ Post-Incident Review: A blameless post-incident review (PIR) document must be produced 
+within 5 business days. The PIR covers: timeline, root cause analysis (5 Whys), impact 
+quantification (affected TPPs, failed requests, customer impact), corrective actions with 
+deadlines, and preventive measures. 
+●​ Quarterly Reporting: Banks must publish quarterly API performance statistics (availability, 
+response times, error rates) on their developer portal. UK OBIE publishes league tables 
+comparing banks’ API performance. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 22

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Open Banking API Gateway Developer Portal">
+    <title>Open Banking | Developer Portal</title>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <div class="logo"></div>
+            <span>Zetheta API</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" class="nav-link active" data-target="home">Overview</a>
+            <a href="#" class="nav-link" data-target="docs">API Docs</a>
+            <a href="#" class="nav-link" data-target="dashboard">Dashboard</a>
+        </div>
+        <div class="nav-actions">
+            <button class="btn btn-secondary" id="loginBtn">Sign In</button>
+            <button class="btn btn-primary" id="registerBtn">Get API Keys</button>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Home / Landing Section -->
+        <section id="home" class="view-section active">
+            <div class="hero">
+                <div class="hero-content">
+                    <span class="badge">Open Banking FAPI 1.0 Compliant</span>
+                    <h1 class="hero-title">Build the future of finance, <span class="text-gradient">securely</span>.</h1>
+                    <p class="hero-subtitle">Access PSD2-compliant APIs to retrieve real-time account data and initiate payments instantly with our developer-first gateway.</p>
+                    <div class="hero-cta">
+                        <button class="btn btn-primary btn-lg" onclick="document.getElementById('registerBtn').click()">Start Building for Free</button>
+                        <button class="btn btn-outline btn-lg" onclick="document.querySelector('[data-target=\'docs\']').click()">Read the Docs</button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="glass-panel code-window">
+                        <div class="window-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="window-title">bash</span>
+                        </div>
+                        <pre><code><span class="code-comment"># Exchange authorization code for token</span>
+curl -X POST https://api.zetheta.com/oauth/token \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -H "X-Client-Cert-Thumbprint: a1b2c3d4..." \
+  -d "grant_type=authorization_code" \
+  -d "code=splxlOBeZQQYbYS6WxSbIA" \
+  -d "client_id=tpp_app_xyz123"
+
+<span class="code-output">{
+  "access_token": "eyJhbGciOiJSUzI1NiIs...",
+  "token_type": "Bearer",
+  "expires_in": 3600
+}</span></code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-grid">
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Financial-Grade Security</h3>
+                    <p>Built-in Mutual TLS (mTLS), PKCE, and signed request objects to ensure compliance with FAPI 1.0 Advanced profiles.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">🏦</div>
+                    <h3>Double-Entry Ledger</h3>
+                    <p>Real-time payment initiation with atomic transactions and robust row-level locking to prevent race conditions.</p>
+                </div>
+                <div class="glass-card feature-card">
+                    <div class="feature-icon">🧪</div>
+                    <h3>Sandbox Environment</h3>
+                    <p>A full synthetic data engine to safely test edge cases, error injection, and rate limiting backoff strategies.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Registration Section -->
+        <section id="register" class="view-section hidden">
+            <div class="glass-panel form-container">
+                <h2>Register your Application</h2>
+                <p class="subtitle">Join the Zetheta network as a Third-Party Provider (TPP).</p>
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="appName">Application Name</label>
+                        <input type="text" id="appName" placeholder="e.g. Finance Tracker Pro" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="redirectUri">Redirect URI</label>
+                        <input type="url" id="redirectUri" placeholder="https://app.yourdomain.com/callback" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="certUpload">Upload Test Certificate (mTLS)</label>
+                        <input type="file" id="certUpload" accept=".pem,.crt" class="file-input" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Generate API Keys</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="view-section hidden">
+            <div class="dashboard-header">
+                <h2>Developer Dashboard</h2>
+                <span class="status-badge success">Sandbox Active</span>
+            </div>
+            
+            <div class="dashboard-grid">
+                <div class="glass-card key-card">
+                    <h3>Your Credentials</h3>
+                    <div class="credential-row">
+                        <span>Client ID</span>
+                        <code>tpp_app_xyz123</code>
+                        <button class="icon-btn" title="Copy">📋</button>
+                    </div>
+                    <div class="credential-row">
+                        <span>Client Secret</span>
+                        <code>************************</code>
+                        <button class="icon-btn" title="Reveal">👁️</button>
+                    </div>
+                </div>
+
+                <div class="glass-card metrics-card">
+                    <h3>API Usage (Last 30 Days)</h3>
+                    <div class="metric-stats">
+                        <div class="stat">
+                            <span class="stat-value">14.2K</span>
+                            <span class="stat-label">Total Requests</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value text-green">99.9%</span>
+                            <span class="stat-label">Success Rate</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">42ms</span>
+                            <span class="stat-label">Avg Latency</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h3 class="mt-4">Sandbox Error Injection</h3>
+            <div class="glass-panel mt-2">
+                <p>Test your app's resilience by passing the <code>x-sandbox-inject-error</code> header in your requests.</p>
+                <div class="error-codes">
+                    <div class="error-badge">429 - Rate Limit</div>
+                    <div class="error-badge">500 - Core Outage</div>
+                    <div class="error-badge">504 - Timeout</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- API Docs Section -->
+        <section id="docs" class="view-section hidden">
+            <div class="glass-panel docs-container">
+                <h2>API Reference</h2>
+                <p>Explore the endpoints available in our Sandbox environment.</p>
+                
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method get">GET</span>
+                        <span class="path">/accounts/{id}/balances</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>Retrieves the available and booked balances for a specific account.</p>
+                        <h4>Headers</h4>
+                        <code>Authorization: Bearer &lt;token&gt;</code><br>
+                        <code>X-Client-Cert-Thumbprint: &lt;hash&gt;</code>
+                    </div>
+                </div>
+
+                <div class="endpoint-card">
+                    <div class="endpoint-header">
+                        <span class="method post">POST</span>
+                        <span class="path">/payments/domestic-payments</span>
+                    </div>
+                    <div class="endpoint-body">
+                        <p>Initiate a real-time domestic payment between two accounts.</p>
+                        <h4>Headers</h4>
+                        <code>X-Idempotency-Key: &lt;uuid&gt;</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

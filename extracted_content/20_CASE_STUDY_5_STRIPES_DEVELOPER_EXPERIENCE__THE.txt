@@ -1,0 +1,73 @@
+CASE STUDY 5: STRIPE’S DEVELOPER EXPERIENCE - THE GOLD STANDARD 
+ 
+Background 
+While Stripe is not an open banking provider, its developer portal and API design are universally 
+regarded as the industry benchmark for developer experience. Stripe’s documentation has been 
+credited as a primary driver of its adoption - developers choose Stripe not just because of its product 
+but because integrating with Stripe is genuinely pleasant. Every open banking API team should study 
+Stripe’s DX practices. 
+What Stripe Does Differently 
+●​ Interactive API Explorer: Every endpoint page includes a live API explorer in the right 
+sidebar. Developers can modify request parameters and see real responses against their 
+test-mode account without leaving the documentation page. The explorer auto-populates 
+authentication headers from the developer’s dashboard session. 
+●​ Code Samples in 7+ Languages: Every code example is available in curl, Python, Ruby, 
+PHP, Java, Node.js, Go, and .NET. The language selector is persistent - once a developer 
+selects Python, all code examples across all pages switch to Python. 
+●​ Changelog with Impact Scoring: Stripe’s changelog classifies every change as: ‘added’ (new 
+feature, non-breaking), ‘changed’ (modification, may require attention), ‘deprecated’ 
+(scheduled for removal), or ‘removed’ (breaking). Each entry links to the affected API version 
+and migration guide. 
+●​ Error Messages That Teach: Stripe’s error responses include not just what went wrong but a 
+direct link to a documentation page explaining how to fix it. The error code ‘card_declined’ 
+links to a page explaining all possible decline reasons and recommended customer-facing 
+messaging. 
+●​ Webhook Testing Tools: Stripe provides a CLI tool (stripe listen) that forwards webhook 
+events to a local development server, eliminating the need for ngrok or public URLs during 
+development. This dramatically reduces the friction of testing event-driven integrations. 
+Lessons for Open Banking Developer Portals 
+●​ Time to First API Call is the single most important DX metric. If a developer cannot make a 
+successful API call within 30 minutes of visiting the portal, the onboarding experience has 
+failed. 
+●​ Code samples must work when copied. Every code example in the documentation should be 
+tested against the sandbox as part of the CI/CD pipeline. A code example that throws an error 
+when executed is worse than no code example. 
+●​ Error messages are documentation. The error response body is the most-read piece of 
+documentation in any API platform. Invest in error taxonomy as a first-class documentation 
+project. 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 39
+
+●​ Developer portal is a conversion funnel. Track: unique visitors → registered developers → 
+sandbox API calls → production API calls. Optimise each step like a product manager 
+optimises a checkout funnel. 
+ 
+CASE STUDY 6: PLAID - AGGREGATOR API DESIGN & CONSENT UX 
+ 
+Background 
+Plaid connects over 12,000 financial institutions in North America and provides a unified API for 
+fintech applications to access bank account data. Unlike the regulatory-mandated open banking 
+models in Europe and India, Plaid operates in the largely unregulated US market and has historically 
+relied on credential-based access (screen scraping) alongside OAuth-based connections where banks 
+offer them. Plaid’s consent UX (Plaid Link) and its API design provide valuable lessons for open 
+banking implementors. 
+Plaid Link - Consent UX 
+Plaid Link is an embeddable widget that handles the entire bank connection flow: institution selection, 
+credential entry or OAuth redirect, account selection, and consent confirmation. Key design choices: 
+(1) the widget supports both credential-based and OAuth-based flows, dynamically selecting the right 
+method based on the institution; (2) the consent screen explicitly shows which data categories will be 
+shared (account names, balances, transactions) and for how long; (3) the widget provides real-time 
+status updates during the connection process (connecting, verifying, finalising); (4) error states 
+include actionable recovery suggestions (try a different account, check credentials, institution is 
+experiencing downtime). 
+Lessons for Interns 
+●​ The consent UX is the moment of truth. If the consent screen is confusing, intimidating, or 
+slow, customers will abandon the flow. This translates directly to the TPP’s conversion rate 
+and, by extension, the bank’s open banking adoption metrics. 
+●​ Account selection must be granular. Customers should be able to select which specific 
+accounts to share, not just consent to ‘all accounts’. This aligns with data minimisation 
+principles and builds customer trust. 
+●​ Real-time connection status reduces abandonment. Showing a progress indicator during the 
+OAuth redirect and token exchange prevents customers from refreshing or navigating away 
+during the critical authentication window. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 40

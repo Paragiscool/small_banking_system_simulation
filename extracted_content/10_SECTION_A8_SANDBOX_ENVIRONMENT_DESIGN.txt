@@ -1,0 +1,66 @@
+SECTION A8: SANDBOX ENVIRONMENT DESIGN 
+A8.1 Sandbox Requirements for Open Banking 
+ 
+PSD2 Article 30(5) mandates that banks provide a testing facility (sandbox) to TPPs at least three 
+months before the go-live date of their production APIs. The sandbox must support the full API 
+lifecycle including onboarding, authentication, consent, data access, and payment initiation. Static 
+mock servers that return hardcoded responses do not satisfy this requirement. 
+A8.2 Sandbox Architecture 
+ 
+A production-grade sandbox for open banking consists of: 
+●​ Synthetic Data Engine: Generates realistic but fictional customer profiles, accounts, 
+transactions, and balances. The data must cover edge cases: multi-currency accounts, joint 
+accounts, accounts in different states (active, suspended, closed), transactions with various 
+merchant category codes (MCCs), and standing orders with different frequencies. 
+●​ Simulated Consent Journey: A mock bank login and consent screen that TPPs can redirect to 
+during testing. The sandbox must support both the ‘happy path’ (customer approves) and error 
+paths (customer declines, session timeout, authentication failure). 
+●​ Simulated Payment Rails: Payment initiation in the sandbox should simulate the full 
+payment lifecycle: accepted → pending → settled (or rejected). Configurable delay parameters 
+allow TPPs to test timeout handling. 
+●​ Rate Limit Simulation: The sandbox should enforce the same rate limits as production so 
+TPPs can test their retry logic and backoff strategies. 
+●​ Error Injection: A mechanism for TPPs to trigger specific error scenarios (401, 403, 429, 
+500, timeout) to test their error handling. This can be via special test account IDs or request 
+headers. 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 19
+
+A8.3 Sandbox vs. Production Parity 
+ 
+Aspect 
+Sandbox 
+Production 
+Data 
+Synthetic, resettable 
+Real customer data 
+Authentication 
+Simplified SCA (test credentials) 
+Full SCA (biometric, OTP) 
+Certificates 
+Test certificates (self-signed OK) 
+Production 
+eIDAS/OBWAC/OBSEAL 
+Payment 
+Settlement 
+Simulated (no real money moves) 
+Real-time settlement 
+Rate Limits 
+Same as production 
+Same as sandbox 
+API Behaviour 
+Identical response schemas 
+Identical response schemas 
+Onboarding 
+Self-service, instant approval 
+Regulatory checks, manual review 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 20

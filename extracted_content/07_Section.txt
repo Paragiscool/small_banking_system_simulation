@@ -1,0 +1,147 @@
+# 
+Endpoint 
+Method 
+Domain 
+Description 
+4 
+/accounts 
+GET 
+Accounts 
+List all accounts the TPP has consent to 
+access 
+5 
+/accounts/{accountId} 
+GET 
+Accounts 
+Retrieve detailed account information 
+(type, currency, status, identifiers) 
+6 
+/accounts/{accountId}/bala
+nces 
+GET 
+Accounts 
+Retrieve current and available balances 
+for an account 
+7 
+/accounts/{accountId}/trans
+actions 
+GET 
+Accounts 
+Retrieve paginated transaction history 
+with date range filtering 
+8 
+/accounts/{accountId}/bene
+ficiaries 
+GET 
+Accounts 
+List registered beneficiaries for an 
+account 
+9 
+/accounts/{accountId}/stan
+ding-orders 
+GET 
+Accounts 
+List standing orders (recurring payments) 
+for an account 
+10 
+/accounts/{accountId}/dire
+ct-debits 
+GET 
+Accounts 
+List direct debit mandates for an account 
+11 
+/domestic-payments 
+POST 
+Payments Initiate a domestic payment (requires 
+payment consent) 
+12 
+/domestic-payments/{paym
+entId} 
+GET 
+Payments Retrieve payment status and details 
+13 
+/domestic-payment-consent
+s 
+POST 
+Payments Create payment-specific consent resource 
+14 
+/international-payment-con
+sents 
+POST 
+Payments Create consent resource for international 
+payment initiation 
+15 
+/international-payment-con
+sents/{consentId} 
+GET 
+Payments Retrieve international payment consent 
+status 
+16 
+/international-payments 
+POST 
+Payments Initiate an international payment with 
+currency conversion 
+17 
+/international-payments/{p
+aymentId} 
+GET 
+Payments Retrieve international payment status and 
+details 
+18 
+/event-subscriptions 
+POST 
+Events 
+Subscribe to event notifications (consent 
+revocation, payment status) 
+19 
+/event-subscriptions/{subId
+} 
+GET 
+Events 
+Retrieve event subscription details 
+20 
+/events 
+POST 
+Events 
+Receive aggregated event notifications 
+(polling model) 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 13
+
+SECTION A5: DEVELOPER PORTAL & EXPERIENCE DESIGN 
+A5.1 Why Developer Experience (DX) Matters in Open Banking 
+ 
+The success of an Open Banking programme is not determined solely by the technical quality of the 
+APIs - it is determined by how quickly and successfully external developers can integrate with those 
+APIs. If a TPP developer cannot understand, authenticate, test, and go live with your APIs within a 
+reasonable timeframe, they will choose a competitor bank’s APIs. Developer Experience (DX) is 
+therefore a first-class product concern, not an afterthought. 
+Research from Stripe, Twilio, and Plaid consistently shows that developer portal quality is the single 
+largest predictor of API adoption. Key DX metrics include: Time to First API Call (TTFAC), Time to 
+First Successful Integration, documentation Net Promoter Score (NPS), support ticket volume per 
+integration, and sandbox-to-production conversion rate. 
+A5.2 Developer Portal Architecture 
+ 
+A production-grade developer portal for open banking must include the following components: 
+●​ Registration & Onboarding: Self-service developer registration, organisation creation, 
+software statement assertion management, certificate upload (mTLS), and redirect URI 
+configuration. The onboarding flow should be completable in under 15 minutes. 
+●​ Interactive API Documentation: Auto-generated from OpenAPI 3.0 specs with a ‘Try It’ 
+feature that allows developers to make API calls directly from the documentation page against 
+the sandbox environment. Tools: Redoc, Swagger UI, Stoplight Elements, ReadMe. 
+●​ Getting Started Guide: A step-by-step quickstart that takes a developer from zero to their 
+first successful API call in under 30 minutes. Includes code samples in Python, Node.js, Java, 
+and C#. 
+●​ Authentication Guide: Dedicated documentation for the OAuth 2.0 / FAPI flow with 
+sequence diagrams, code examples, token management best practices, and common pitfalls. 
+●​ Sandbox Environment: A fully functional test environment with synthetic data (test 
+accounts, test customers, test payment rails) that mirrors production API behaviour. The 
+sandbox must support the full consent journey, not just static mock responses. 
+●​ API Changelog: Versioned changelog documenting every API change with impact 
+assessment, migration guides, and deprecation timelines. 
+●​ Status Page: Real-time API health dashboard showing availability, latency percentiles, error 
+rates, and scheduled maintenance windows. 
+●​ Support Channels: Developer forum, FAQ, ticketing system, and office hours. Slack/Discord 
+community for informal support. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 14

@@ -1,0 +1,82 @@
+SECTION B4: SCORING & PROGRESSION SYSTEM 
+ 
+The simulation tracks intern performance across six dimensions, each contributing to the overall 
+score: 
+Dimension 
+Max 
+Points 
+Assessment Method 
+Technical Architecture 200 
+Gateway design document quality, component diagram 
+completeness, technology rationale depth 
+Regulatory 
+Compliance 
+200 
+Consent model accuracy, SCA implementation, audit logging 
+design, certificate validation 
+Security Engineering 
+150 
+OAuth/FAPI flow correctness, threat model coverage, mTLS 
+implementation, token binding 
+Developer Experience 
+150 
+Portal wireframe quality, documentation structure, sandbox 
+specification, onboarding flow 
+API Governance 
+150 
+Rate limiting strategy, versioning policy, deprecation lifecycle, 
+monitoring design 
+Documentation 
+Quality 
+150 
+OpenAPI spec accuracy, README completeness, architecture 
+diagrams, commit message quality 
+ 
+ACHIEVEMENT SYSTEM:  
+Compliance Champion: All consent lifecycle states correctly specified with no gaps. 
+DX Pioneer: Developer portal wireframes include interactive ‘Try It’ API explorer. 
+Security Sentinel: FAPI 1.0 Advanced profile fully implemented with PAR and JARM. 
+Specification Maestro: All 20 endpoints pass automated OpenAPI linting with zero warnings. 
+Sandbox Architect: Sandbox includes error injection, configurable latency, and data reset 
+capability. 
+ 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 31
+
+SECTION B5: RISK EVENTS & DECISION POINTS 
+ 
+Throughout the simulation, the intern encounters decision points that test their ability to balance 
+competing priorities. These decisions have cascading consequences: 
+ 
+Decision Point 1: Technology Lock-In vs. Speed 
+Vikram (Business) has found a managed API gateway vendor offering a 90-day free trial with full 
+PSD2 compliance built in. The vendor will have Meridian’s open banking APIs live within 6 weeks. 
+However: (1) the vendor uses a proprietary configuration language (no portability), (2) the pricing 
+model escalates sharply after 100,000 monthly API calls, (3) the vendor’s sandbox is static 
+(hardcoded responses), and (4) migrating away requires re-implementing all gateway logic from 
+scratch. 
+Option A - Accept vendor: Go live in 6 weeks, accept lock-in risk. Vikram is delighted, Ananya is 
+nervous about due diligence timelines, developers will struggle with the static sandbox. 
+Option B - Build on open source: Use Kong or Tyk, go live in 4-5 months. Full control over 
+configuration, no lock-in, dynamic sandbox possible. Vikram is frustrated by the timeline, Ananya 
+approves the architecture review, developers get a better sandbox. 
+Option C - Hybrid: Use the vendor for production gateway (speed) but build a custom sandbox and 
+developer portal independently. Go live in 8 weeks, moderate lock-in, good DX. Higher total cost but 
+balanced stakeholder satisfaction. 
+Assessment: The intern must justify their choice with a decision matrix weighing: regulatory risk, 
+vendor lock-in cost, time-to-market value, developer experience impact, and total cost of ownership 
+over 3 years. There is no single correct answer - the quality of the reasoning is assessed. 
+ 
+Decision Point 2: Security Maximalism vs. Usability 
+Ananya (Compliance) demands that the consent flow require the customer to re-enter their full 
+banking password plus a hardware token OTP for every consent authorisation. She also wants all API 
+responses encrypted at the application layer (in addition to TLS), and all TPP certificates to be 
+manually reviewed by the compliance team before activation (2–3 business day approval). The 
+developer community will revolt: re-entering passwords is poor UX, application-layer encryption 
+adds latency and complexity, and manual certificate review kills self-service onboarding. 
+Option A - Accept all demands: Maximum security, minimum usability. Expect TPP integration 
+times measured in weeks, not hours. Regulatory conformance is assured but developer adoption will 
+suffer. 
+Option B - Negotiate smart defaults: Implement SCA with biometric (fingerprint/face) as the 
+primary factor (better UX than passwords), rely on TLS 1.3 for transport security (application-layer 
+encryption is unnecessary if TLS is correctly configured), and implement automated certificate 
+Strictly Private and Confidential - Not for Circulation                                                                          Page number: 32
