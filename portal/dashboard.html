@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zetheta Bank - Developer Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #06080F;
+            --surface: rgba(255, 255, 255, 0.03);
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --primary: #4F8AFF;
+            --primary-glow: rgba(79, 138, 255, 0.4);
+            --accent: #B055FF;
+            --text-main: #F3F4F6;
+            --text-muted: #9CA3AF;
+            --success: #10B981;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(79, 138, 255, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(176, 85, 255, 0.15), transparent 25%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background: rgba(6, 8, 15, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--surface-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .header-section {
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(16px);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px var(--primary-glow);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .metric-title {
+            color: var(--text-muted);
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .metric-value {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(180deg, #FFFFFF 0%, #A1A1AA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .table-container {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(16px);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 16px;
+            color: var(--text-muted);
+            font-weight: 400;
+            border-bottom: 1px solid var(--surface-border);
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            color: var(--text-main);
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Loading Animation */
+        .skeleton {
+            background: linear-gradient(90deg, var(--surface-border) 25%, rgba(255,255,255,0.15) 50%, var(--surface-border) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="logo">Zetheta API</div>
+    <div style="color: var(--text-muted); font-size: 14px;">Connected as: <strong style="color: white;">Test Finance App</strong></div>
+</nav>
+
+<div class="container">
+    <div class="header-section">
+        <h1>Overview</h1>
+        <div class="subtitle">Live API traffic and system analytics</div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="metric-title">Total Volume Processed</div>
+            <div class="metric-value" id="valVolume"><div class="skeleton" style="height: 48px; width: 60%;"></div></div>
+        </div>
+        <div class="card">
+            <div class="metric-title">Active User Consents</div>
+            <div class="metric-value" id="valConsents"><div class="skeleton" style="height: 48px; width: 40%;"></div></div>
+        </div>
+        <div class="card">
+            <div class="metric-title">API Requests Initiated</div>
+            <div class="metric-value" id="valRequests"><div class="skeleton" style="height: 48px; width: 50%;"></div></div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <h3 style="margin-top: 0; margin-bottom: 20px;">Recent Ledger Transactions</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Transaction ID</th>
+                    <th>Account ID</th>
+                    <th>Amount</th>
+                    <th>Date (UTC)</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="txBody">
+                <tr><td colspan="5"><div class="skeleton" style="height: 20px; width: 100%; margin-bottom:10px;"></div></td></tr>
+                <tr><td colspan="5"><div class="skeleton" style="height: 20px; width: 100%;"></div></td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function fetchAnalytics() {
+        try {
+            const response = await fetch('http://127.0.0.1:8000/analytics/dashboard');
+            if (response.ok) {
+                const data = await response.json();
+                
+                // Animate Numbers
+                document.getElementById('valVolume').innerText = `$${data.metrics.total_volume_processed.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+                document.getElementById('valConsents').innerText = data.metrics.active_user_consents;
+                document.getElementById('valRequests').innerText = data.metrics.total_api_calls;
+
+                // Render Table
+                const tbody = document.getElementById('txBody');
+                tbody.innerHTML = '';
+                
+                if (data.recent_transactions.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color: var(--text-muted);">No transactions found.</td></tr>';
+                } else {
+                    data.recent_transactions.forEach(tx => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td style="font-family: monospace; color: var(--text-muted);">${tx.transaction_id.substring(0,8)}...</td>
+                            <td style="font-family: monospace;">${tx.account_id}</td>
+                            <td style="color: var(--success); font-weight: 600;">+${tx.amount}</td>
+                            <td style="color: var(--text-muted); font-size: 14px;">${tx.date}</td>
+                            <td><span class="badge-success">SETTLED</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            }
+        } catch (error) {
+            console.error("Failed to load analytics:", error);
+        }
+    }
+
+    // Load data and set interval for live updates
+    setTimeout(fetchAnalytics, 800); // Slight delay to show off the skeleton loading animation
+    setInterval(fetchAnalytics, 5000);
+</script>
+
+</body>
+</html>
