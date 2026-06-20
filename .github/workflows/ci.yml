@@ -38,13 +38,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         
-    - name: Start FastAPI server and Run Tests
+    - name: Run Tests
       env:
         DATABASE_URL: postgresql://zetheta:zetheta_password@localhost:5432/zetheta_core
       run: |
-        # Start server in background
-        uvicorn src.main:app --host 127.0.0.1 --port 8000 &
-        sleep 5
-        
-        # Run rate limit test as a simple CI check
-        python test_rate_limit.py
+        # The database is mocked in conftest.py, so we can just run pytest
+        python -m pytest -v tests/
