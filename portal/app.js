@@ -46,22 +46,47 @@ document.addEventListener('DOMContentLoaded', () => {
         switchView('register');
     });
 
-    // Registration Form Submission Mock
+    // Dynamic Registration Form Submission
     const regForm = document.getElementById('registrationForm');
     if(regForm) {
-        regForm.addEventListener('submit', (e) => {
+        regForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = regForm.querySelector('button');
             const originalText = btn.innerText;
             btn.innerText = "Generating Keys...";
             btn.disabled = true;
+            
+            const appName = document.getElementById('appName').value;
+            const redirectUri = document.getElementById('redirectUri').value;
 
-            setTimeout(() => {
-                alert("Registration Successful! Redirecting to Dashboard.");
+            try {
+                const response = await fetch('http://127.0.0.1:8000/portal/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ app_name: appName, redirect_uri: redirectUri })
+                });
+
+                if(response.ok) {
+                    const data = await response.json();
+                    alert(data.message);
+                    
+                    // Update dashboard UI with new keys
+                    const credRows = document.querySelectorAll('.credential-row code');
+                    if(credRows.length >= 2) {
+                        credRows[0].innerText = data.client_id;
+                        credRows[1].innerText = data.client_secret;
+                    }
+                    
+                    switchView('dashboard');
+                } else {
+                    alert("Registration failed. Is the backend running?");
+                }
+            } catch (err) {
+                alert("Network error. Ensure uvicorn is running on port 8000.");
+            } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
-                switchView('dashboard');
-            }, 1500);
+            }
         });
     }
 });
