@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zetheta Bank - Consent Management</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --surface-color: #161b22;
+            --primary-color: #58a6ff;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+            --border-color: #30363d;
+            --danger-color: #f85149;
+            --success-color: #3fb950;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .consent-card {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: white;
+        }
+
+        .tpp-name {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .permissions-list {
+            text-align: left;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .permissions-list ul {
+            padding-left: 20px;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            color: white;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .btn-approve {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-deny {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+        }
+
+        #successMessage {
+            display: none;
+            color: var(--success-color);
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="consent-card" id="consentCard">
+    <h2>Connect your Bank</h2>
+    <p>The application <span class="tpp-name" id="displayTppName">FinanceTracker App</span> is requesting access to your Zetheta Bank account.</p>
+    
+    <div class="permissions-list">
+        <strong>Requested Permissions:</strong>
+        <ul>
+            <li>Read Account Balances</li>
+            <li>Initiate Domestic Payments</li>
+            <li>Read Transaction History</li>
+        </ul>
+    </div>
+
+    <input type="text" id="clientId" class="input-field" placeholder="TPP Client ID (e.g. tpp_123)" required>
+    <input type="text" id="userId" class="input-field" placeholder="Your Bank Username (e.g. user-123)" required>
+
+    <div class="btn-container">
+        <button class="btn-deny" onclick="deny()">Deny Access</button>
+        <button class="btn-approve" id="approveBtn">Approve & Authorize</button>
+    </div>
+
+    <div id="successMessage">
+        Authorization Code Generated! Redirecting to TPP...
+    </div>
+</div>
+
+<script>
+    function deny() {
+        alert("Consent Denied. Returning to App.");
+    }
+
+    document.getElementById('approveBtn').addEventListener('click', async () => {
+        const btn = document.getElementById('approveBtn');
+        btn.innerText = "Authorizing...";
+        btn.disabled = true;
+
+        const clientId = document.getElementById('clientId').value;
+        const userId = document.getElementById('userId').value;
+
+        if(!clientId || !userId) {
+            alert("Please fill in both fields for the simulation.");
+            btn.innerText = "Approve & Authorize";
+            btn.disabled = false;
+            return;
+        }
+
+        try {
+            const response = await fetch('http://127.0.0.1:8000/consent/authorize', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    client_id: clientId, 
+                    user_id: userId,
+                    permissions: '{"accounts": "read", "payments": "write"}'
+                })
+            });
+
+            if(response.ok) {
+                const data = await response.json();
+                document.getElementById('successMessage').style.display = 'block';
+                document.getElementById('successMessage').innerText = `Success! Code: ${data.authorization_code.substring(0,10)}... Redirecting...`;
+                console.log("Full Code:", data.authorization_code);
+            } else {
+                const err = await response.json();
+                alert("Error: " + err.detail);
+                btn.innerText = "Approve & Authorize";
+                btn.disabled = false;
+            }
+        } catch (error) {
+            alert("Network Error. Is the backend running?");
+            btn.innerText = "Approve & Authorize";
+            btn.disabled = false;
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
-from .routers import auth, accounts, payments, sandbox, portal
+from .routers import auth, accounts, payments, sandbox, portal, consent
 from . import models
 
 # Create database tables
@@ -59,6 +59,7 @@ app.include_router(accounts.router)
 app.include_router(payments.router)
 app.include_router(sandbox.router)
 app.include_router(portal.router)
+app.include_router(consent.router)
 
 @app.get("/")
 def read_root():

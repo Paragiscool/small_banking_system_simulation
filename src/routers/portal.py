@@ -27,7 +27,9 @@ def register_tpp(request: RegisterTPPRequest, db: Session = Depends(get_db)):
     new_tpp = ThirdPartyProvider(
         client_id=client_id,
         name=request.app_name,
-        redirect_uri=request.redirect_uri
+        redirect_uris=request.redirect_uri,
+        mtls_cert_fingerprint="mock-fingerprint",
+        signing_cert_public_key="mock-public-key"
     )
     
     db.add(new_tpp)
