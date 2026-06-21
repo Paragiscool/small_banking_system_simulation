@@ -1,9 +1,7 @@
 from fastapi import Request, HTTPException
 import time
-from collections import defaultdict
-
-# In-memory store: { "client_id_or_ip": { "endpoint_category": {"timestamp": int, "count": int} } }
-RATE_LIMITS_STORE = defaultdict(lambda: defaultdict(lambda: {"timestamp": 0, "count": 0}))
+import os
+import redis.asyncio as redis
 
 # Define limits
 LIMITS = {
@@ -11,30 +9,31 @@ LIMITS = {
     "payments": 60   # 60 per minute
 }
 
+REDIS_URL = os.getenv("REDIS_URL", "redis://localhost:6379")
+redis_client = redis.from_url(REDIS_URL, decode_responses=True)
+
 def rate_limiter(category: str):
     """
     Dependency to enforce rate limiting based on a Fixed Window (1 minute).
     """
-    def _rate_limit_dependency(request: Request):
-        # We'll use the client IP for the sandbox, or a mock client_id
+    async def _rate_limit_dependency(request: Request):
         client_identifier = request.client.host
         
         current_time = int(time.time())
         window_start = current_time - (current_time % 60) # Start of current minute
         
-        record = RATE_LIMITS_STORE[client_identifier][category]
-        
-        # If the window has passed, reset
-        if record["timestamp"] < window_start:
-            record["timestamp"] = window_start
-            record["count"] = 0
-            
-        record["count"] += 1
-        
         limit = LIMITS.get(category, 60)
-        remaining = max(0, limit - record["count"])
+        key = f"ratelimit:{category}:{client_identifier}:{window_start}"
         
-        if record["count"] > limit:
+        async with redis_client.pipeline(transaction=True) as pipe:
+            pipe.incr(key)
+            pipe.expire(key, 60, nx=True) # Only set expiration if key has no TTL (Redis 7+ feature)
+            results = await pipe.execute()
+            
+        count = results[0]
+        remaining = max(0, limit - count)
+        
+        if count > limit:
             raise HTTPException(
                 status_code=429,
                 detail="Too Many Requests",
@@ -46,7 +45,7 @@ def rate_limiter(category: str):
                 }
             )
             
-        # Add headers to request state to be injected into response later (FastAPI specific logic usually requires middleware for outbound headers, but this shows intent)
+        # Add headers to request state to be injected into response later
         request.state.ratelimit_limit = limit
         request.state.ratelimit_remaining = remaining
         request.state.ratelimit_reset = window_start + 60

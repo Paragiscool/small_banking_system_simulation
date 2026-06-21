@@ -30,6 +30,7 @@ class ThirdPartyProvider(Base):
     redirect_uris = Column(String, nullable=False) # JSON string
     mtls_cert_fingerprint = Column(String, nullable=False)
     signing_cert_public_key = Column(String, nullable=False)
+    webhook_url = Column(String, nullable=True)
     status = Column(String, default="ACTIVE")
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
 
@@ -84,3 +85,38 @@ class IdempotencyKey(Base):
     response_body = Column(String, nullable=True) # JSON string
     response_status = Column(Integer, nullable=True)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class VirtualCardStatus(enum.Enum):
+    ACTIVE = "ACTIVE"
+    FROZEN = "FROZEN"
+    CANCELED = "CANCELED"
+
+class VirtualCard(Base):
+    __tablename__ = "virtual_cards"
+    card_id = Column(String, primary_key=True, default=generate_uuid)
+    account_id = Column(String, ForeignKey("accounts.account_id"), nullable=False, index=True)
+    card_number = Column(String, unique=True, nullable=False)
+    cvv = Column(String, nullable=False)
+    expiry_date = Column(String, nullable=False) # e.g., "12/28"
+    status = Column(Enum(VirtualCardStatus), default=VirtualCardStatus.ACTIVE)
+    daily_limit = Column(Float, default=1000.0)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class ExchangeRate(Base):
+    __tablename__ = "exchange_rates"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    from_currency = Column(String, nullable=False, index=True)
+    to_currency = Column(String, nullable=False, index=True)
+    rate = Column(Float, nullable=False)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+class AuditLog(Base):
+    __tablename__ = "audit_log"
+    id = Column(String, primary_key=True, default=generate_uuid)
+    timestamp = Column(DateTime, default=datetime.datetime.utcnow, index=True)
+    method = Column(String, nullable=False)
+    path = Column(String, nullable=False)
+    ip_address = Column(String, nullable=True)
+    status_code = Column(Integer, nullable=False)
+    response_time_ms = Column(Float, nullable=False)
+

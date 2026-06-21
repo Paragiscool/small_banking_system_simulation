@@ -49,3 +49,15 @@ def verify_mtls(x_client_cert_thumbprint: str = Header(None)):
     if not x_client_cert_thumbprint:
         raise HTTPException(status_code=403, detail="mTLS client certificate thumbprint required")
     return x_client_cert_thumbprint
+
+from typing import List
+
+class RoleChecker:
+    def __init__(self, allowed_scopes: List[str]):
+        self.allowed_scopes = set(allowed_scopes)
+
+    def __call__(self, user: dict = Depends(get_current_user)):
+        user_scopes = set(user.get("scopes", []))
+        if not self.allowed_scopes.intersection(user_scopes):
+            raise HTTPException(status_code=403, detail="Not enough permissions")
+        return user

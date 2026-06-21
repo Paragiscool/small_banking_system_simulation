@@ -35,3 +35,24 @@ class TokenResponse(BaseModel):
 class ParResponse(BaseModel):
     request_uri: str
     expires_in: int
+
+class VirtualCardCreate(BaseModel):
+    account_id: str
+    daily_limit: Optional[float] = 1000.0
+
+class VirtualCardResponse(BaseModel):
+    card_id: str
+    account_id: str
+    card_number: str
+    cvv: str
+    expiry_date: str
+    status: str
+    daily_limit: float
+
+class VirtualCardStatusUpdate(BaseModel):
+    status: str
+
+class ChargeRequest(BaseModel):
+    merchant_name: str
+    amount: float
+    currency: str = "USD"

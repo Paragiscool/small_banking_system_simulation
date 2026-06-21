@@ -41,11 +41,14 @@ def test_db():
     
     acc1 = models.Account(account_id=account1_id, user_id="user-123", internal_account_number="test-1001", currency="USD")
     acc2 = models.Account(account_id=account2_id, user_id="user-456", internal_account_number="test-2002", currency="USD")
-    db.add_all([acc1, acc2])
+    account3_id = "test-account-3"
+    acc3 = models.Account(account_id=account3_id, user_id="user-789", internal_account_number="test-3003", currency="EUR")
+    db.add_all([acc1, acc2, acc3])
     
     bal1 = models.Balance(account_id=account1_id, available_balance=5000.0, booked_balance=5000.0)
     bal2 = models.Balance(account_id=account2_id, available_balance=150.0, booked_balance=150.0)
-    db.add_all([bal1, bal2])
+    bal3 = models.Balance(account_id=account3_id, available_balance=1000.0, booked_balance=1000.0)
+    db.add_all([bal1, bal2, bal3])
     
     tpp = models.ThirdPartyProvider(
         client_id="tpp_test123",
@@ -55,6 +58,12 @@ def test_db():
         signing_cert_public_key="test-key"
     )
     db.add(tpp)
+    
+    rates = [
+        models.ExchangeRate(from_currency="USD", to_currency="EUR", rate=0.92),
+        models.ExchangeRate(from_currency="EUR", to_currency="USD", rate=1.08)
+    ]
+    db.add_all(rates)
     
     db.commit()
     
@@ -69,3 +78,23 @@ def client(test_db):
     """Provide a TestClient that uses the overridden DB dependency."""
     with TestClient(app) as c:
         yield c
+
+@pytest.fixture
+def access_token(client):
+    token_res = client.post(
+        "/oauth/token",
+        data={
+            "code": "test-auth-code",
+            "client_id": "tpp_test123"
+        },
+        headers={"X-Client-Cert-Thumbprint": "valid-cert-123"}
+    )
+    return token_res.json()["access_token"]
+
+@pytest.fixture
+def auth_headers(access_token):
+    return {
+        "Authorization": f"Bearer {access_token}",
+        "X-Client-Cert-Thumbprint": "valid-cert-123",
+        "x-idempotency-key": str(uuid.uuid4())
+    }

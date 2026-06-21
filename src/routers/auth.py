@@ -46,9 +46,16 @@ def token_exchange(
     
     # Generate real JWT token bound to certificate
     expires_in = 3600
+    
+    # Assign scopes based on client type
+    scopes = ["read:balance", "write:payments"]
+    if client_id == "admin_portal":
+        scopes.append("admin:approve")
+        
     payload = {
         "sub": "user-123",
         "client_id": client_id,
+        "scopes": scopes,
         "exp": datetime.utcnow() + timedelta(seconds=expires_in),
         "iat": datetime.utcnow()
     }

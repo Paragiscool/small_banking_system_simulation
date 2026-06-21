@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./banking_core.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://admin:rootpassword@localhost:5432/open_banking_core")
 
 # In PostgreSQL we don't need check_same_thread
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}

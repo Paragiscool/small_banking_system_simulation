@@ -9,9 +9,14 @@ from ..models import ThirdPartyProvider
 
 router = APIRouter(prefix="/portal", tags=["Developer Portal"])
 
+from typing import Dict, Optional
+
+# ...
+
 class RegisterTPPRequest(BaseModel):
     app_name: str
     redirect_uri: str
+    webhook_url: Optional[str] = None
 
 class RegisterTPPResponse(BaseModel):
     client_id: str
@@ -29,7 +34,8 @@ def register_tpp(request: RegisterTPPRequest, db: Session = Depends(get_db)):
         name=request.app_name,
         redirect_uris=request.redirect_uri,
         mtls_cert_fingerprint="mock-fingerprint",
-        signing_cert_public_key="mock-public-key"
+        signing_cert_public_key="mock-public-key",
+        webhook_url=request.webhook_url
     )
     
     db.add(new_tpp)

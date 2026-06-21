@@ -1,8 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base
-from .routers import auth, accounts, payments, sandbox, portal, consent, analytics
+from .routers import auth, accounts, payments, sandbox, portal, consent, analytics, admin, cards, websockets
 from . import models
+from .middleware import AuditLogMiddleware
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
@@ -13,6 +14,8 @@ app = FastAPI(
     version="1.0.0",
 )
 
+app.add_middleware(AuditLogMiddleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -20,6 +23,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from .jobs import calculate_daily_interest
+
+scheduler = AsyncIOScheduler()
+
+@app.on_event("startup")
+async def start_scheduler():
+    scheduler.add_job(calculate_daily_interest, 'cron', hour=0, minute=0)
+    scheduler.start()
+    
+@app.on_event("shutdown")
+async def stop_scheduler():
+    scheduler.shutdown()
+
 
 import time
 import logging
@@ -57,10 +75,23 @@ async def monitor_requests(request: Request, call_next):
 app.include_router(auth.router)
 app.include_router(accounts.router)
 app.include_router(payments.router)
+from strawberry.fastapi import GraphQLRouter
+from .graphql.schema import schema, get_context
+
+# Add GraphQL API
+graphql_app = GraphQLRouter(
+    schema,
+    context_getter=get_context
+)
+app.include_router(graphql_app, prefix="/graphql")
+
 app.include_router(sandbox.router)
 app.include_router(portal.router)
 app.include_router(consent.router)
 app.include_router(analytics.router)
+app.include_router(admin.router)
+app.include_router(cards.router)
+app.include_router(websockets.router)
 
 @app.get("/")
 def read_root():
