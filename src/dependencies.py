@@ -30,7 +30,7 @@ def get_current_user(authorization: str = Header(...), x_client_cert_thumbprint:
     
     # Still allow the mock token to preserve backwards compatibility for our test scripts
     if token == "mock-valid-token":
-        return {"user_id": "user-123", "consent_id": "consent-abc"}
+        return {"user_id": "user-123", "consent_id": "consent-abc", "scopes": ["read:balance", "admin:approve", "write:payments"]}
         
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

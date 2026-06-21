@@ -69,8 +69,12 @@ if transaction_successful:
     }, account_id)
 ```
 
-## 3. Long-Term Production Considerations
-While this in-memory implementation is perfect for a prototype, here is what changes in a large-scale production environment (e.g., millions of users):
+## 3. The Enterprise Upgrade: Redis Pub/Sub (Horizontal Scaling)
+While the basic dictionary approach works for a single server, it breaks down in a clustered environment. If you have 5 backend servers behind a Load Balancer, User A might connect their WebSocket to Server 1, but their incoming payment is processed by Server 3. Server 3's in-memory `active_connections` dictionary doesn't know about User A!
 
-1. **Horizontal Scaling**: If you have 5 backend servers behind a Load Balancer, User A might connect their WebSocket to Server 1, but the payment is processed by Server 3. Server 3's in-memory `active_connections` dictionary doesn't know about User A!
-2. **The Fix (Pub/Sub)**: Enterprise systems use **Redis Pub/Sub** or **Kafka**. Server 3 would publish the event to Redis, and Server 1 (which holds the WebSocket) would instantly read it from Redis and push it to the client.
+To solve this, we implemented **Redis Pub/Sub**:
+1. When Server 3 processes a payment, it *publishes* a message to a Redis channel: `redis_client.publish(f"account:{account_id}", message)`.
+2. Every server instance (including Server 1) runs an asynchronous background task (`_listen_to_redis`) subscribed to that channel.
+3. Server 1 instantly receives the message from Redis and pushes it down the WebSocket to User A.
+
+This architecture guarantees that real-time notifications are delivered reliably, no matter which server node the user is connected to.

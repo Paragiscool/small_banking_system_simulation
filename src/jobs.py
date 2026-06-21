@@ -23,12 +23,27 @@ async def calculate_daily_interest():
                     balance.available_balance += interest
                     
                     tx_id = f"INT-{str(uuid.uuid4())[:8]}"
+                    from .services.ledger_security import generate_ledger_hash
+                    last_entry = db.query(models.LedgerEntry).filter(
+                        models.LedgerEntry.account_id == account.account_id
+                    ).order_by(models.LedgerEntry.sequence_number.desc()).first()
+                    
+                    seq = last_entry.sequence_number + 1 if last_entry else 1
+                    prev_hash = last_entry.current_hash if last_entry else "0"
+                    curr_hash = generate_ledger_hash(
+                        prev_hash, account.account_id, interest, 
+                        models.EntryType.CREDIT.value, tx_id
+                    )
+
                     entry = models.LedgerEntry(
                         transaction_id=tx_id,
                         account_id=account.account_id,
                         amount=interest,
                         entry_type=models.EntryType.CREDIT,
-                        status="BOOKED"
+                        status="BOOKED",
+                        sequence_number=seq,
+                        previous_hash=prev_hash,
+                        current_hash=curr_hash
                     )
                     db.add(entry)
                     

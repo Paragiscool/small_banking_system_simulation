@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-slate-900 text-slate-100 antialiased;
+    background-image: 
+        radial-gradient(circle at 15% 50%, rgba(79, 138, 255, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(176, 85, 255, 0.15), transparent 25%);
+    background-attachment: fixed;
+  }
+}
+
+.glass-panel {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl rounded-2xl;
+}

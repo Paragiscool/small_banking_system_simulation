@@ -16,5 +16,17 @@ services:
     ports:
       - "6379:6379"
 
+  celery_worker:
+    build: .
+    command: celery -A src.worker.celery_app worker --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      - REDIS_URL=redis://redis_db:6379/0
+      - DATABASE_URL=postgresql://admin:rootpassword@postgres_db:5432/open_banking_core
+    depends_on:
+      - redis_db
+      - postgres_db
+
 volumes:
   pgdata:

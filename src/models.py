@@ -67,8 +67,11 @@ class Balance(Base):
     available_balance = Column(Float, default=0.0)
     booked_balance = Column(Float, default=0.0)
 
+from sqlalchemy import Column, String, Float, Boolean, ForeignKey, DateTime, Enum, Integer, UniqueConstraint
+
 class LedgerEntry(Base):
     __tablename__ = "ledger_entries"
+    __table_args__ = (UniqueConstraint('account_id', 'sequence_number', name='uix_account_sequence'),)
     entry_id = Column(String, primary_key=True, default=generate_uuid)
     transaction_id = Column(String, index=True, nullable=False)
     account_id = Column(String, ForeignKey("accounts.account_id"))
@@ -76,6 +79,9 @@ class LedgerEntry(Base):
     entry_type = Column(Enum(EntryType), nullable=False)
     status = Column(String, default="BOOKED")
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    sequence_number = Column(Integer, nullable=False, default=1)
+    previous_hash = Column(String, nullable=False, default="0")
+    current_hash = Column(String, nullable=False, default="0")
 
 class IdempotencyKey(Base):
     __tablename__ = "idempotency_keys"
@@ -120,3 +126,12 @@ class AuditLog(Base):
     status_code = Column(Integer, nullable=False)
     response_time_ms = Column(Float, nullable=False)
 
+class WebhookSubscription(Base):
+    __tablename__ = "webhook_subscriptions"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    tpp_id = Column(String, nullable=False)
+    destination_url = Column(String, nullable=False)
+    secret_key = Column(String, nullable=False)  # Used for signing HMAC
+    is_active = Column(Boolean, default=True)
+    subscribed_events = Column(String, nullable=False) # JSON array or comma separated

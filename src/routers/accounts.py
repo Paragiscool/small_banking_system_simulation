@@ -77,3 +77,26 @@ def get_account_statement(account_id: str, db: Session = Depends(get_db)):
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename=statement_{account_id}.csv"}
     )
+
+@router.get("/{account_id}/transactions")
+def get_account_transactions(account_id: str, db: Session = Depends(get_db)):
+    """
+    Returns a JSON feed of the recent transactions for an account.
+    Used by the Real-Time Dashboard to populate the initial state.
+    """
+    entries = db.query(models.LedgerEntry).filter(
+        models.LedgerEntry.account_id == account_id
+    ).order_by(models.LedgerEntry.created_at.desc()).limit(50).all()
+    
+    transactions = []
+    for entry in entries:
+        transactions.append({
+            "transaction_id": entry.transaction_id,
+            "created_at": entry.created_at.isoformat(),
+            "entry_type": entry.entry_type.name,
+            "amount": entry.amount,
+            "status": entry.status,
+            "sequence_number": entry.sequence_number
+        })
+        
+    return {"transactions": transactions}

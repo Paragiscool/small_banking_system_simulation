@@ -8,6 +8,7 @@ import uuid
 import json
 import httpx
 import logging
+from ..worker import dispatch_webhook
 
 logger = logging.getLogger(__name__)
 
@@ -17,18 +18,7 @@ router = APIRouter(
     dependencies=[Depends(sandbox_error_injection), Depends(rate_limiter("payments")), Depends(verify_mtls), Depends(RoleChecker(["write:payments"]))]
 )
 
-def fire_webhook(webhook_url: str, transaction_id: str, status: str):
-    if not webhook_url:
-        return
-    try:
-        # In a real system, we'd use a robust task queue like Celery. 
-        # BackgroundTasks is perfect for this simulation.
-        payload = {"transaction_id": transaction_id, "status": status}
-        # Fire and forget POST request
-        httpx.post(webhook_url, json=payload, timeout=5.0)
-        logger.info(f"Webhook fired to {webhook_url} for tx {transaction_id}")
-    except Exception as e:
-        logger.error(f"Failed to fire webhook: {str(e)}")
+
 
 # ...
 
@@ -106,19 +96,52 @@ async def domestic_payment(
         is_fraud_flagged = request.amount > 10000.0
         tx_status = "PENDING_REVIEW" if is_fraud_flagged else "SETTLED"
         
+        from ..services.ledger_security import generate_ledger_hash
+        
+        # Sender hash chain
+        last_sender_entry = db.query(models.LedgerEntry).filter(
+            models.LedgerEntry.account_id == request.sender_account_id
+        ).order_by(models.LedgerEntry.sequence_number.desc()).first()
+        
+        sender_seq = last_sender_entry.sequence_number + 1 if last_sender_entry else 1
+        sender_prev_hash = last_sender_entry.current_hash if last_sender_entry else "0"
+        sender_curr_hash = generate_ledger_hash(
+            sender_prev_hash, request.sender_account_id, -request.amount, 
+            models.EntryType.DEBIT.value, transaction_id
+        )
+        
         debit_entry = models.LedgerEntry(
             transaction_id=transaction_id,
             account_id=request.sender_account_id,
             amount=-request.amount,
             entry_type=models.EntryType.DEBIT,
-            status=tx_status
+            status=tx_status,
+            sequence_number=sender_seq,
+            previous_hash=sender_prev_hash,
+            current_hash=sender_curr_hash
         )
+        
+        # Receiver hash chain
+        last_receiver_entry = db.query(models.LedgerEntry).filter(
+            models.LedgerEntry.account_id == request.receiver_account_id
+        ).order_by(models.LedgerEntry.sequence_number.desc()).first()
+        
+        receiver_seq = last_receiver_entry.sequence_number + 1 if last_receiver_entry else 1
+        receiver_prev_hash = last_receiver_entry.current_hash if last_receiver_entry else "0"
+        receiver_curr_hash = generate_ledger_hash(
+            receiver_prev_hash, request.receiver_account_id, receiver_amount, 
+            models.EntryType.CREDIT.value, transaction_id
+        )
+        
         credit_entry = models.LedgerEntry(
             transaction_id=transaction_id,
             account_id=request.receiver_account_id,
             amount=receiver_amount,
             entry_type=models.EntryType.CREDIT,
-            status=tx_status
+            status=tx_status,
+            sequence_number=receiver_seq,
+            previous_hash=receiver_prev_hash,
+            current_hash=receiver_curr_hash
         )
         db.add(debit_entry)
         db.add(credit_entry)
@@ -141,8 +164,11 @@ async def domestic_payment(
         await invalidate_cache(f"balance_{request.receiver_account_id}")
         
         # 4. Trigger Asynchronous Webhook & WebSockets
-        mock_webhook_url = "http://127.0.0.1:8000/sandbox/mock-webhook"
-        background_tasks.add_task(fire_webhook, mock_webhook_url, transaction_id, tx_status)
+        dispatch_webhook.delay(
+            tpp_id="mock-client",
+            event_type="payment.completed",
+            payload_dict={"transaction_id": transaction_id, "status": tx_status}
+        )
         
         background_tasks.add_task(
             manager.broadcast_to_account,
